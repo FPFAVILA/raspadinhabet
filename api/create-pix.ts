@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
 const PUSHINPAY_API_URL = 'https://api.pushinpay.com.br/api/pix/cashIn';
 
 interface PushinPayResponse {
@@ -39,10 +37,7 @@ const getErrorMessage = (status: number, data?: any): string => {
   return errorMap[status] || 'Erro ao processar pagamento. Tente novamente.';
 };
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse
-): Promise<void> {
+export default async function handler(req: any, res: any): Promise<void> {
   if (req.method !== 'POST') {
     res.status(405).json({
       ok: false,
