@@ -179,23 +179,23 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
         )}
 
         <div className={`bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
-          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-5 overflow-hidden">
+          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-4 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
-            <div className="relative flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
-                  <Crown className="w-6 h-6 text-white" />
+            <div className="relative flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20 flex-shrink-0">
+                  <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <div className="text-left">
-                  <h1 className="text-xl font-bold text-white">RaspadinhaPRO</h1>
+                <div className="text-left min-w-0">
+                  <h1 className="text-base sm:text-xl font-bold text-white truncate">RaspadinhaPRO</h1>
                   <p className="text-white/80 text-xs">Prêmios Reais</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/20">
-                <Gift className="w-4 h-4 text-white" />
-                <div className="text-lg font-bold text-white whitespace-nowrap">R$ 14,70</div>
+              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg border border-white/20 flex-shrink-0">
+                <Gift className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                <div className="text-base sm:text-lg font-bold text-white whitespace-nowrap">R$ 14,70</div>
               </div>
             </div>
           </div>
