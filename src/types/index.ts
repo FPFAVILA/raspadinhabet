@@ -9,6 +9,16 @@ export interface GameState {
   balance: number;
   scratchCardsUsed: number;
   hasWonIphone: boolean;
+  kycStatus?: KYCStatus;
+}
+
+export interface KYCStatus {
+  isVerified: boolean;
+  identityVerified: boolean;
+  depositVerified: boolean;
+  cpf?: string;
+  fullName?: string;
+  birthDate?: string;
 }
 
 export interface ScratchCard {

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { X, Banknote, Shield, Clock, CheckCircle, Copy, AlertTriangle } from 'lucide-react';
+import { KYCStatus } from '../types';
 
 interface WithdrawModalProps {
   isOpen: boolean;
   onClose: () => void;
   onWithdraw: (amount: number) => void;
   balance: number;
+  kycStatus?: KYCStatus;
+  onOpenKYC?: () => void;
 }
 
 interface WithdrawFormData {
@@ -15,11 +18,13 @@ interface WithdrawFormData {
   fullName: string;
 }
 
-export const WithdrawModal: React.FC<WithdrawModalProps> = ({ 
-  isOpen, 
-  onClose, 
+export const WithdrawModal: React.FC<WithdrawModalProps> = ({
+  isOpen,
+  onClose,
   onWithdraw,
-  balance
+  balance,
+  kycStatus,
+  onOpenKYC
 }) => {
   const [formData, setFormData] = useState<WithdrawFormData>({
     amount: '',
@@ -35,6 +40,15 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
   const maxWithdraw = balance;
 
   if (!isOpen) return null;
+
+  const isKYCVerified = kycStatus?.isVerified || false;
+
+  const handleOpenKYCModal = () => {
+    onClose();
+    if (onOpenKYC) {
+      onOpenKYC();
+    }
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -191,21 +205,42 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
         </div>
 
         <div className="p-5">
+          {/* Aviso de KYC não verificado */}
+          {!isKYCVerified && (
+            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Shield className="w-5 h-5 text-yellow-600" />
+                <span className="text-yellow-800 font-bold text-sm">Verificação Necessária</span>
+              </div>
+              <p className="text-yellow-700 text-sm mb-3">
+                Para realizar saques, você precisa verificar sua conta (KYC). Este processo é rápido e garante a segurança das suas transações.
+              </p>
+              <button
+                onClick={handleOpenKYCModal}
+                className="w-full bg-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition-all duration-300 active:scale-95"
+                style={{ touchAction: 'manipulation' }}
+              >
+                Verificar Conta Agora
+              </button>
+            </div>
+          )}
+
           {/* Aviso se saldo insuficiente */}
-          {balance < minWithdraw && (
+          {isKYCVerified && balance < minWithdraw && (
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
                 <span className="text-red-800 font-bold text-sm">Saldo Insuficiente</span>
               </div>
               <p className="text-red-700 text-sm">
-                Você precisa de pelo menos R$ 40,00 para sacar. 
+                Você precisa de pelo menos R$ 40,00 para sacar.
                 Faltam R$ {(minWithdraw - balance).toFixed(2).replace('.', ',')}
               </p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {isKYCVerified && (
+            <form onSubmit={handleSubmit} className="space-y-4">
             {/* Valor do Saque */}
             <div>
               <label className="block text-gray-700 font-bold mb-2 text-sm">
@@ -335,8 +370,10 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
               )}
             </button>
           </form>
+          )}
 
           {/* Informações de Segurança */}
+          {isKYCVerified && (
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-4">
             <div className="flex items-start gap-2">
               <Shield className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
@@ -351,6 +388,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

@@ -104,7 +104,12 @@ export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
     balance: 0,
     scratchCardsUsed: 0,
-    hasWonIphone: false
+    hasWonIphone: false,
+    kycStatus: {
+      isVerified: false,
+      identityVerified: false,
+      depositVerified: false
+    }
   });
 
   const [isNewUser, setIsNewUser] = useState(true);
@@ -190,7 +195,26 @@ export const useGameState = () => {
       ...gameState,
       balance: newBalance
     };
+
+    if (newState.kycStatus && !newState.kycStatus.depositVerified && amount > 0) {
+      newState.kycStatus = {
+        ...newState.kycStatus,
+        depositVerified: true,
+        isVerified: newState.kycStatus.identityVerified && true
+      };
+      console.log('✅ Depósito verificado! KYC concluído:', newState.kycStatus.isVerified);
+    }
+
     console.log('Novo saldo:', newBalance);
+    saveGameState(newState);
+  }, [gameState, saveGameState]);
+
+  const updateKYCStatus = useCallback((kycStatus: GameState['kycStatus']) => {
+    console.log('🔐 Atualizando KYC:', kycStatus);
+    const newState: GameState = {
+      ...gameState,
+      kycStatus
+    };
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
@@ -199,6 +223,7 @@ export const useGameState = () => {
     isNewUser,
     startNewCard,
     completeCard,
-    addBalance
+    addBalance,
+    updateKYCStatus
   };
 };

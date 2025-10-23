@@ -8,6 +8,7 @@ import { WithdrawModal } from './WithdrawModal';
 import { SocialProofNotifications } from './SocialProofNotifications';
 import { PrizesSection } from './PrizesSection';
 import { MoneyPrizeModal } from './MoneyPrizeModal';
+import { KYCVerificationModal } from './KYCVerificationModal';
 import {
   Play,
   Plus,
@@ -44,13 +45,14 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     setIsCheckingRegistration(false);
   }, []);
 
-  const { gameState, startNewCard, completeCard, addBalance } = useGameState();
+  const { gameState, startNewCard, completeCard, addBalance, updateKYCStatus } = useGameState();
   const CARD_COST = 4.90;
   const [currentCard, setCurrentCard] = useState<any>(null);
   const [showAddBalanceModal, setShowAddBalanceModal] = useState(false);
   const [showWinningScreen, setShowWinningScreen] = useState(false);
   const [showMoneyPrizeModal, setShowMoneyPrizeModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showKYCModal, setShowKYCModal] = useState(false);
   const [wonAmount, setWonAmount] = useState(0);
 
   useEffect(() => {
@@ -127,6 +129,19 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
   const handleCloseMoneyPrizeModal = () => {
     setShowMoneyPrizeModal(false);
     setWonAmount(0);
+  };
+
+  const handleOpenKYC = () => {
+    setShowKYCModal(true);
+  };
+
+  const handleUpdateKYC = (kycStatus: any) => {
+    updateKYCStatus(kycStatus);
+  };
+
+  const handleOpenDepositFromKYC = () => {
+    setShowKYCModal(false);
+    setShowAddBalanceModal(true);
   };
 
 
@@ -320,6 +335,16 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
         onClose={() => setShowWithdrawModal(false)}
         onWithdraw={handleWithdraw}
         balance={gameState.balance}
+        kycStatus={gameState.kycStatus}
+        onOpenKYC={handleOpenKYC}
+      />
+
+      <KYCVerificationModal
+        isOpen={showKYCModal}
+        onClose={() => setShowKYCModal(false)}
+        kycStatus={gameState.kycStatus || { isVerified: false, identityVerified: false, depositVerified: false }}
+        onUpdateKYC={handleUpdateKYC}
+        onOpenDepositModal={handleOpenDepositFromKYC}
       />
       {/* Notificações Sociais */}
       <SocialProofNotifications />
