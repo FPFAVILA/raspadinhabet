@@ -78,10 +78,22 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
     if (!formData.birthDate) {
       newErrors.birthDate = 'Data de nascimento é obrigatória';
     } else {
-      const birthYear = parseInt(formData.birthDate.split('-')[0]);
-      const currentYear = new Date().getFullYear();
-      if (currentYear - birthYear < 18) {
-        newErrors.birthDate = 'Você deve ter 18 anos ou mais';
+      const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const match = formData.birthDate.match(dateRegex);
+
+      if (!match) {
+        newErrors.birthDate = 'Data inválida (DD/MM/AAAA)';
+      } else {
+        const day = parseInt(match[1]);
+        const month = parseInt(match[2]);
+        const year = parseInt(match[3]);
+        const currentYear = new Date().getFullYear();
+
+        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > currentYear) {
+          newErrors.birthDate = 'Data inválida';
+        } else if (currentYear - year < 18) {
+          newErrors.birthDate = 'Você deve ter 18 anos ou mais';
+        }
       }
     }
 
@@ -244,10 +256,20 @@ export const KYCVerificationModal: React.FC<KYCVerificationModalProps> = ({
               <div>
                 <label className="block text-white font-semibold mb-2 text-sm">Data de Nascimento</label>
                 <input
-                  type="date"
+                  type="text"
                   value={formData.birthDate}
-                  onChange={(e) => handleInputChange('birthDate', e.target.value)}
-                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 2) {
+                      value = value.slice(0, 2) + '/' + value.slice(2);
+                    }
+                    if (value.length >= 5) {
+                      value = value.slice(0, 5) + '/' + value.slice(5, 9);
+                    }
+                    handleInputChange('birthDate', value);
+                  }}
+                  maxLength={10}
+                  placeholder="DD/MM/AAAA"
                   className={`w-full bg-gray-800 border ${errors.birthDate ? 'border-red-500' : 'border-gray-700'} text-white px-4 py-3 rounded-xl focus:outline-none focus:border-accent transition-colors`}
                 />
                 {errors.birthDate && (

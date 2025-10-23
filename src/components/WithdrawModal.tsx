@@ -41,7 +41,9 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
   if (!isOpen) return null;
 
+  const requiresKYC = balance >= 40;
   const isKYCVerified = kycStatus?.isVerified || false;
+  const needsKYCVerification = requiresKYC && !isKYCVerified;
 
   const handleOpenKYCModal = () => {
     onClose();
@@ -205,15 +207,15 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
         </div>
 
         <div className="p-5">
-          {/* Aviso de KYC não verificado */}
-          {!isKYCVerified && (
+          {/* Aviso de KYC não verificado (só aparece se tiver saldo >= 40) */}
+          {needsKYCVerification && (
             <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-5 h-5 text-yellow-600" />
                 <span className="text-yellow-800 font-bold text-sm">Verificação Necessária</span>
               </div>
               <p className="text-yellow-700 text-sm mb-3">
-                Para realizar saques, você precisa verificar sua conta (KYC). Este processo é rápido e garante a segurança das suas transações.
+                Para realizar saques com saldo acima de R$ 40,00, você precisa verificar sua conta (KYC). Este processo é rápido e garante a segurança das suas transações.
               </p>
               <button
                 onClick={handleOpenKYCModal}
@@ -226,7 +228,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
           )}
 
           {/* Aviso se saldo insuficiente */}
-          {isKYCVerified && balance < minWithdraw && (
+          {!needsKYCVerification && balance < minWithdraw && (
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -239,7 +241,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
             </div>
           )}
 
-          {isKYCVerified && (
+          {!needsKYCVerification && (
             <form onSubmit={handleSubmit} className="space-y-4">
             {/* Valor do Saque */}
             <div>
@@ -373,7 +375,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
           )}
 
           {/* Informações de Segurança */}
-          {isKYCVerified && (
+          {!needsKYCVerification && (
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mt-4">
             <div className="flex items-start gap-2">
               <Shield className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
