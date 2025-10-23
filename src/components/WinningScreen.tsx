@@ -30,7 +30,7 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-2 z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-2 z-50 overflow-y-auto">
       {/* Animação de fogos de artifício */}
       <div className="fixed inset-0 pointer-events-none z-10">
         {Array.from({ length: 8 }).map((_, i) => (
@@ -43,16 +43,14 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
               animation: `firework ${2 + Math.random()}s ease-out infinite`,
               animationDelay: `${i * 0.3}s`,
               background: `radial-gradient(circle, ${
-                i % 4 === 0 ? '#fbbf24' :
-                i % 4 === 1 ? '#ef4444' :
-                i % 4 === 2 ? '#3b82f6' :
-                '#10b981'
+                i % 3 === 0 ? '#01D375' :
+                i % 3 === 1 ? '#fbbf24' :
+                '#ffffff'
               } 0%, transparent 70%)`,
               boxShadow: `0 0 20px ${
-                i % 4 === 0 ? '#fbbf24' :
-                i % 4 === 1 ? '#ef4444' :
-                i % 4 === 2 ? '#3b82f6' :
-                '#10b981'
+                i % 3 === 0 ? '#01D375' :
+                i % 3 === 1 ? '#fbbf24' :
+                '#ffffff'
               }`
             }}
           />
@@ -62,18 +60,14 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
       {/* Confetes caindo */}
       {confetti && (
         <div className="fixed inset-0 pointer-events-none z-20 overflow-hidden">
-          {Array.from({ length: 150 }).map((_, i) => (
+          {Array.from({ length: 120 }).map((_, i) => (
             <div
               key={`confetti-${i}`}
               className={`absolute ${
-                i % 8 === 0 ? 'w-3 h-3 bg-yellow-400' :
-                i % 8 === 1 ? 'w-2 h-4 bg-pink-500' :
-                i % 8 === 2 ? 'w-4 h-2 bg-blue-400' :
-                i % 8 === 3 ? 'w-3 h-3 bg-green-400' :
-                i % 8 === 4 ? 'w-2 h-3 bg-purple-400' :
-                i % 8 === 5 ? 'w-4 h-3 bg-orange-400' :
-                i % 8 === 6 ? 'w-2 h-2 bg-red-400' :
-                'w-3 h-2 bg-cyan-400'
+                i % 4 === 0 ? 'w-3 h-3 bg-accent' :
+                i % 4 === 1 ? 'w-2 h-4 bg-yellow-400' :
+                i % 4 === 2 ? 'w-4 h-2 bg-white' :
+                'w-3 h-2 bg-accent'
               }`}
               style={{
                 left: `${Math.random() * 100}%`,
@@ -90,16 +84,17 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
 
       {/* Estrelas brilhantes de fundo */}
       <div className="fixed inset-0 pointer-events-none z-5">
-        {Array.from({ length: 50 }).map((_, i) => (
+        {Array.from({ length: 40 }).map((_, i) => (
           <div
             key={`star-${i}`}
-            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            className="absolute w-1 h-1 rounded-full animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 3}s`,
               animationDuration: `${1 + Math.random() * 2}s`,
-              boxShadow: '0 0 4px white'
+              backgroundColor: i % 2 === 0 ? '#01D375' : '#fbbf24',
+              boxShadow: `0 0 4px ${i % 2 === 0 ? '#01D375' : '#fbbf24'}`
             }}
           />
         ))}
