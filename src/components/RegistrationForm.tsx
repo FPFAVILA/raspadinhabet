@@ -351,7 +351,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               </div>
               <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
                 <Award className="w-7 h-7 text-accent mx-auto mb-2" />
-                <div className="text-white text-sm font-medium">iPhone 15</div>
+                <div className="text-white text-sm font-medium">Plataforma Regularizzada</div>
               </div>
               <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
                 <Shield className="w-7 h-7 text-accent mx-auto mb-2" />
