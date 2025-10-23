@@ -178,37 +178,37 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
           </div>
         )}
 
-        <div className={`bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
-          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-5 overflow-hidden">
+        <div className={`bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
+          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-8 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20 flex-shrink-0">
-                  <Crown className="w-7 h-7 text-white" />
+            <div className="relative flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg">
+                  <Crown className="w-8 h-8 text-white drop-shadow-lg" />
                 </div>
                 <div className="text-left min-w-0">
-                  <h1 className="text-xl font-bold text-white truncate">RaspadinhaPRO</h1>
-                  <p className="text-white/80 text-sm">Prêmios Reais</p>
+                  <h1 className="text-2xl font-bold text-white truncate drop-shadow-lg">RaspadinhaPRO</h1>
+                  <p className="text-white/90 text-base font-medium">Prêmios Reais</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/20 flex-shrink-0">
-                <Gift className="w-5 h-5 text-white" />
-                <div className="text-lg font-bold text-white whitespace-nowrap">R$ 14,70</div>
+              <div className="flex items-center gap-2.5 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-xl border-2 border-white/30 flex-shrink-0 shadow-lg">
+                <Gift className="w-6 h-6 text-white drop-shadow-lg" />
+                <div className="text-xl font-bold text-white whitespace-nowrap drop-shadow-lg">R$ 14,70</div>
               </div>
             </div>
           </div>
 
-          <div className={`px-5 py-3.5 border-b border-gray-800 ${
+          <div className={`px-6 py-4 border-b border-gray-800 ${
             timerUrgency === 'critical' ? 'bg-red-500/10' :
             timerUrgency === 'high' ? 'bg-orange-500/10' :
             'bg-gray-800/50'
           }`}>
-            <div className="flex items-center justify-center gap-2.5 text-sm">
-              <Clock className="w-4.5 h-4.5 text-white/70" />
-              <span className="text-white/70 font-medium">Oferta expira em:</span>
-              <span className={`font-mono font-bold text-white px-2.5 py-1 rounded ${
+            <div className="flex items-center justify-center gap-3 text-base">
+              <Clock className="w-5 h-5 text-white/80" />
+              <span className="text-white/80 font-medium">Oferta expira em:</span>
+              <span className={`font-mono font-bold text-white px-3 py-1.5 rounded-lg text-lg ${
                 timerUrgency === 'critical' ? 'bg-red-500/20 animate-pulse' : 'bg-white/10'
               }`}>
                 {formatTime(timeLeft)}
@@ -216,8 +216,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
             </div>
           </div>
 
-          <div className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-4.5">
+          <div className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="relative">
                 <div className={`relative transition-all duration-300 ${focusedField === 'name' ? 'scale-[1.01]' : ''}`}>
                   <UserIcon className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 z-10 ${
@@ -229,7 +229,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('name', e.target.value)}
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => handleFieldBlur('name')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base ${
+                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
                       errors.name && touched.name
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'name'
@@ -262,7 +262,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('email', e.target.value)}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => handleFieldBlur('email')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base ${
+                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
                       errors.email && touched.email
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'email'
@@ -296,7 +296,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('password', e.target.value)}
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => handleFieldBlur('password')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base ${
+                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
                       errors.password && touched.password
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'password'
@@ -321,20 +321,20 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               <button
                 type="submit"
                 disabled={isSubmitting || timeLeft === 0}
-                className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-4.5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent/50 relative overflow-hidden group mt-6"
+                className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent/50 relative overflow-hidden group mt-8 text-lg"
                 style={{ touchAction: 'manipulation' }}
               >
                 <div className="relative flex items-center justify-center gap-2">
                   {isSubmitting ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Processando...</span>
                     </>
                   ) : timeLeft === 0 ? (
                     <span>Oferta Expirada</span>
                   ) : (
                     <>
-                      <Gift className="w-5 h-5 animate-bounce" />
+                      <Gift className="w-6 h-6 animate-bounce" />
                       <span className="drop-shadow-lg">
                         {timerUrgency === 'critical' ? 'GARANTIR AGORA!' : 'GARANTIR BÔNUS'}
                       </span>
@@ -344,22 +344,22 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               </button>
             </form>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              <div className="text-center p-3.5 bg-gray-800/50 rounded-lg border border-gray-700">
-                <Gift className="w-6 h-6 text-accent mx-auto mb-1.5" />
-                <div className="text-white text-xs font-medium">Prêmios Reais</div>
+            <div className="mt-8 grid grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                <Gift className="w-7 h-7 text-accent mx-auto mb-2" />
+                <div className="text-white text-sm font-medium">Prêmios Reais</div>
               </div>
-              <div className="text-center p-3.5 bg-gray-800/50 rounded-lg border border-gray-700">
-                <Award className="w-6 h-6 text-accent mx-auto mb-1.5" />
-                <div className="text-white text-xs font-medium">iPhone 15</div>
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                <Award className="w-7 h-7 text-accent mx-auto mb-2" />
+                <div className="text-white text-sm font-medium">iPhone 15</div>
               </div>
-              <div className="text-center p-3.5 bg-gray-800/50 rounded-lg border border-gray-700">
-                <Shield className="w-6 h-6 text-accent mx-auto mb-1.5" />
-                <div className="text-white text-xs font-medium">Seguro</div>
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                <Shield className="w-7 h-7 text-accent mx-auto mb-2" />
+                <div className="text-white text-sm font-medium">Seguro</div>
               </div>
             </div>
 
-            <div className="mt-4 text-center text-gray-500 text-xs">
+            <div className="mt-6 text-center text-gray-500 text-sm">
               Dados protegidos com criptografia SSL
             </div>
           </div>
