@@ -30,30 +30,80 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-2 z-50 overflow-y-auto">
+      {/* Animação de fogos de artifício */}
+      <div className="fixed inset-0 pointer-events-none z-10">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`firework-${i}`}
+            className="absolute w-2 h-2 rounded-full"
+            style={{
+              left: `${20 + (i * 10)}%`,
+              top: `${10 + (i % 3) * 20}%`,
+              animation: `firework ${2 + Math.random()}s ease-out infinite`,
+              animationDelay: `${i * 0.3}s`,
+              background: `radial-gradient(circle, ${
+                i % 4 === 0 ? '#fbbf24' :
+                i % 4 === 1 ? '#ef4444' :
+                i % 4 === 2 ? '#3b82f6' :
+                '#10b981'
+              } 0%, transparent 70%)`,
+              boxShadow: `0 0 20px ${
+                i % 4 === 0 ? '#fbbf24' :
+                i % 4 === 1 ? '#ef4444' :
+                i % 4 === 2 ? '#3b82f6' :
+                '#10b981'
+              }`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Confetes caindo */}
       {confetti && (
-        <div className="fixed inset-0 pointer-events-none z-20">
-          {Array.from({ length: 120 }).map((_, i) => (
+        <div className="fixed inset-0 pointer-events-none z-20 overflow-hidden">
+          {Array.from({ length: 150 }).map((_, i) => (
             <div
-              key={i}
-              className={`absolute rounded-full ${
-                i % 6 === 0 ? 'w-4 h-4 bg-yellow-400 animate-bounce' :
-                i % 6 === 1 ? 'w-3 h-3 bg-accent animate-pulse' :
-                i % 6 === 2 ? 'w-5 h-5 bg-yellow-300 animate-bounce' :
-                i % 6 === 3 ? 'w-3 h-3 bg-orange-400 animate-spin' :
-                i % 6 === 4 ? 'w-4 h-4 bg-yellow-500 animate-pulse' :
-                'w-2 h-2 bg-orange-300 animate-bounce'
+              key={`confetti-${i}`}
+              className={`absolute ${
+                i % 8 === 0 ? 'w-3 h-3 bg-yellow-400' :
+                i % 8 === 1 ? 'w-2 h-4 bg-pink-500' :
+                i % 8 === 2 ? 'w-4 h-2 bg-blue-400' :
+                i % 8 === 3 ? 'w-3 h-3 bg-green-400' :
+                i % 8 === 4 ? 'w-2 h-3 bg-purple-400' :
+                i % 8 === 5 ? 'w-4 h-3 bg-orange-400' :
+                i % 8 === 6 ? 'w-2 h-2 bg-red-400' :
+                'w-3 h-2 bg-cyan-400'
               }`}
               style={{
                 left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                top: `-${Math.random() * 20}%`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+                animation: `confettiFall ${3 + Math.random() * 2}s linear infinite`,
                 animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${1.5 + Math.random() * 2}s`
+                opacity: 0.8
               }}
             />
           ))}
         </div>
       )}
+
+      {/* Estrelas brilhantes de fundo */}
+      <div className="fixed inset-0 pointer-events-none z-5">
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${1 + Math.random() * 2}s`,
+              boxShadow: '0 0 4px white'
+            }}
+          />
+        ))}
+      </div>
 
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden relative my-auto max-h-[95vh]">
         <div className="absolute top-2 left-2 bg-red-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full animate-pulse z-10 uppercase tracking-wide">
