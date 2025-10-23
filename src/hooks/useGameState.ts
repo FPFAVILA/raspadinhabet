@@ -7,13 +7,13 @@ const CARD_COST = 4.90;
 const getWinLogic = (roundNumber: number) => {
   if (roundNumber === 3) return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
   if (roundNumber === 7) return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
-  if (roundNumber === 12) return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
+  if (roundNumber === 12) return { shouldWin: true, prizeAmount: 0, prizeType: 'applewatch' };
   return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 };
 
-const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone'): ScratchCard => {
+const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'applewatch'): ScratchCard => {
   const grid: ScratchBlock[] = [];
-  const winningSymbol = prizeType === 'iphone' ? '/iphone_13_PNG31.png' : '💰';
+  const winningSymbol = prizeType === 'applewatch' ? '/Apple-Watch-PNG-High-Quality-Image.png' : '💰';
 
   const moneySymbols = ['💵', '💰', '💸', '🪙', '🤑'];
   const appleImages = [
@@ -41,7 +41,7 @@ const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone')
     grid,
     isCompleted: false,
     hasWon: true,
-    prizeAmount: prizeType === 'iphone' ? 4899 : prizeAmount,
+    prizeAmount: prizeType === 'applewatch' ? 2499 : prizeAmount,
     prizeType,
   };
 };
@@ -145,7 +145,7 @@ export const useGameState = () => {
     console.log('Lógica:', winLogic);
 
     const card = winLogic.shouldWin
-      ? generateWinningCard(winLogic.prizeAmount, winLogic.prizeType as 'money' | 'iphone')
+      ? generateWinningCard(winLogic.prizeAmount, winLogic.prizeType as 'money' | 'applewatch')
       : generateLosingCard();
 
     const newBalance = parseFloat((gameState.balance - CARD_COST).toFixed(2));
@@ -171,8 +171,8 @@ export const useGameState = () => {
 
     let newState = { ...gameState };
 
-    if (card.prizeType === 'iphone') {
-      console.log('🎁 GANHOU IPHONE!');
+    if (card.prizeType === 'applewatch') {
+      console.log('🎁 GANHOU APPLE WATCH!');
       newState.hasWonIphone = true;
     } else if (card.prizeAmount && card.prizeAmount > 0) {
       console.log('💰 Ganhou R$', card.prizeAmount);

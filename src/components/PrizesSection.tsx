@@ -29,14 +29,14 @@ export const PrizesSection: React.FC = React.memo(() => {
       description: '128GB - Todas as cores'
     },
     {
-      id: 'iphone13promax',
-      name: 'iPhone 13 Pro Max',
-      value: 'R$ 4.899',
-      image: '/iphone_13_PNG31.png',
+      id: 'applewatch9',
+      name: 'Apple Watch Series 9',
+      value: 'R$ 2.499',
+      image: '/Apple-Watch-PNG-High-Quality-Image.png',
       gradient: 'bg-gray-600',
       type: 'apple',
-      icon: <Smartphone className="w-4 h-4" />,
-      description: '128GB - Prata'
+      icon: <Watch className="w-4 h-4" />,
+      description: '45mm - GPS - Meia-Noite'
     },
     {
       id: 'iphone14',
