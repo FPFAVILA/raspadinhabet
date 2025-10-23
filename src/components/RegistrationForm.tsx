@@ -178,54 +178,50 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
           </div>
         )}
 
-        <div className={`bg-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/20 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
-          <div className="bg-gradient-to-br from-accent via-accent to-accent-hover p-6 text-center relative overflow-hidden">
-            <div className="relative">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl mb-3 shadow-2xl border border-white/30">
-                <Crown className="w-8 h-8 text-white animate-pulse" />
-              </div>
+        <div className={`bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
+          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-5 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
-              <h1 className="text-2xl font-bold text-white mb-4 drop-shadow-2xl">
-                Raspadinha<span className="text-yellow-300">PRO</span>
-              </h1>
-
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30 shadow-2xl mb-4">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Gift className="w-6 h-6 text-yellow-300 animate-bounce" />
-                  <span className="text-white font-bold uppercase tracking-wide">Bônus de Cadastro</span>
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
+                  <Crown className="w-6 h-6 text-white" />
                 </div>
-                <div className="text-4xl font-bold text-white mb-2 drop-shadow-2xl">
-                  R$ 14,70
-                </div>
-                <div className="text-white/90 font-medium">
-                  + 3 Raspadinhas Premium
+                <div className="text-left">
+                  <h1 className="text-xl font-bold text-white">RaspadinhaPRO</h1>
+                  <p className="text-white/80 text-xs">Prêmios Reais</p>
                 </div>
               </div>
 
-              <div className={`p-3 rounded-xl ${
-                timerUrgency === 'critical' ? 'bg-red-500/30 border-2 border-red-400 animate-pulse' :
-                timerUrgency === 'high' ? 'bg-orange-500/20 border border-orange-400' :
-                'bg-white/10 border border-white/30'
-              }`}>
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <Clock className={`w-5 h-5 text-white ${timerUrgency === 'critical' ? 'animate-bounce' : ''}`} />
-                  <span className="text-white font-bold">
-                    {timerUrgency === 'critical' ? 'ÚLTIMOS MINUTOS!' : 'Expira em:'}
-                  </span>
-                  <span className="font-mono font-bold text-white text-lg">
-                    {formatTime(timeLeft)}
-                  </span>
-                </div>
+              <div className="text-right">
+                <div className="text-xs text-white/70 mb-0.5">Bônus</div>
+                <div className="text-2xl font-bold text-white">R$ 14,70</div>
               </div>
             </div>
           </div>
 
-          <div className="p-6 bg-gray-900/50 backdrop-blur-sm">
+          <div className={`px-5 py-3 border-b border-gray-800 ${
+            timerUrgency === 'critical' ? 'bg-red-500/10' :
+            timerUrgency === 'high' ? 'bg-orange-500/10' :
+            'bg-gray-800/50'
+          }`}>
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <Clock className="w-4 h-4 text-white/70" />
+              <span className="text-white/70">Oferta expira em:</span>
+              <span className={`font-mono font-bold text-white px-2 py-0.5 rounded ${
+                timerUrgency === 'critical' ? 'bg-red-500/20 animate-pulse' : 'bg-white/10'
+              }`}>
+                {formatTime(timeLeft)}
+              </span>
+            </div>
+          </div>
+
+          <div className="p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">
                 <div className={`relative transition-all duration-300 ${focusedField === 'name' ? 'scale-[1.01]' : ''}`}>
                   <UserIcon className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 z-10 ${
-                    focusedField === 'name' ? 'text-accent' : 'text-white/50'
+                    focusedField === 'name' ? 'text-accent' : 'text-gray-400'
                   }`} />
                   <input
                     type="text"
@@ -233,12 +229,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('name', e.target.value)}
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => handleFieldBlur('name')}
-                    className={`w-full pl-12 pr-12 py-3.5 bg-white/10 backdrop-blur-sm rounded-xl border-2 transition-all duration-300 text-white placeholder-white/50 focus:outline-none ${
+                    className={`w-full pl-12 pr-12 py-3.5 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none ${
                       errors.name && touched.name
-                        ? 'border-red-500 bg-red-500/10 shadow-lg shadow-red-500/20'
+                        ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'name'
-                        ? 'border-accent bg-accent/10 shadow-lg shadow-accent/20'
-                        : 'border-white/20 hover:border-white/30 hover:bg-white/15'
+                        ? 'border-accent bg-gray-800'
+                        : 'border-gray-700 hover:border-gray-600'
                     }`}
                     placeholder="Nome completo"
                     autoComplete="name"
@@ -258,7 +254,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               <div className="relative">
                 <div className={`relative transition-all duration-300 ${focusedField === 'email' ? 'scale-[1.01]' : ''}`}>
                   <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 z-10 ${
-                    focusedField === 'email' ? 'text-accent' : 'text-white/50'
+                    focusedField === 'email' ? 'text-accent' : 'text-gray-400'
                   }`} />
                   <input
                     type="email"
@@ -266,12 +262,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('email', e.target.value)}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => handleFieldBlur('email')}
-                    className={`w-full pl-12 pr-12 py-3.5 bg-white/10 backdrop-blur-sm rounded-xl border-2 transition-all duration-300 text-white placeholder-white/50 focus:outline-none ${
+                    className={`w-full pl-12 pr-12 py-3.5 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none ${
                       errors.email && touched.email
-                        ? 'border-red-500 bg-red-500/10 shadow-lg shadow-red-500/20'
+                        ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'email'
-                        ? 'border-accent bg-accent/10 shadow-lg shadow-accent/20'
-                        : 'border-white/20 hover:border-white/30 hover:bg-white/15'
+                        ? 'border-accent bg-gray-800'
+                        : 'border-gray-700 hover:border-gray-600'
                     }`}
                     placeholder="seu@email.com"
                     inputMode="email"
@@ -292,7 +288,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               <div className="relative">
                 <div className={`relative transition-all duration-300 ${focusedField === 'password' ? 'scale-[1.01]' : ''}`}>
                   <Shield className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 z-10 ${
-                    focusedField === 'password' ? 'text-accent' : 'text-white/50'
+                    focusedField === 'password' ? 'text-accent' : 'text-gray-400'
                   }`} />
                   <input
                     type="password"
@@ -300,12 +296,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('password', e.target.value)}
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => handleFieldBlur('password')}
-                    className={`w-full pl-12 pr-12 py-3.5 bg-white/10 backdrop-blur-sm rounded-xl border-2 transition-all duration-300 text-white placeholder-white/50 focus:outline-none ${
+                    className={`w-full pl-12 pr-12 py-3.5 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none ${
                       errors.password && touched.password
-                        ? 'border-red-500 bg-red-500/10 shadow-lg shadow-red-500/20'
+                        ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'password'
-                        ? 'border-accent bg-accent/10 shadow-lg shadow-accent/20'
-                        : 'border-white/20 hover:border-white/30 hover:bg-white/15'
+                        ? 'border-accent bg-gray-800'
+                        : 'border-gray-700 hover:border-gray-600'
                     }`}
                     placeholder="Senha (mínimo 6 caracteres)"
                     autoComplete="new-password"
@@ -348,30 +344,23 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               </button>
             </form>
 
-            <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <h3 className="font-bold text-white text-sm mb-3 text-center flex items-center justify-center gap-2">
-                <Award className="w-4 h-4 text-accent" />
-                <span>Vantagens Exclusivas</span>
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-white/90 text-sm">
-                  <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                  <span>Raspadinha Premium com prêmios reais</span>
-                </div>
-                <div className="flex items-center gap-2 text-white/90 text-sm">
-                  <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                  <span>Chance de ganhar iPhone 15 Pro</span>
-                </div>
-                <div className="flex items-center gap-2 text-white/90 text-sm">
-                  <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                  <span>Prêmios em dinheiro até R$ 5.000</span>
-                </div>
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              <div className="text-center p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                <Gift className="w-5 h-5 text-accent mx-auto mb-1" />
+                <div className="text-white text-xs font-medium">Prêmios Reais</div>
+              </div>
+              <div className="text-center p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                <Award className="w-5 h-5 text-accent mx-auto mb-1" />
+                <div className="text-white text-xs font-medium">iPhone 15</div>
+              </div>
+              <div className="text-center p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                <Shield className="w-5 h-5 text-accent mx-auto mb-1" />
+                <div className="text-white text-xs font-medium">Seguro</div>
               </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-center gap-2 text-white/60 text-xs">
-              <Shield className="w-4 h-4 text-accent" />
-              <span>Dados 100% protegidos e criptografados</span>
+            <div className="mt-4 text-center text-gray-500 text-xs">
+              Dados protegidos com criptografia SSL
             </div>
           </div>
         </div>
