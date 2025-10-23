@@ -10,8 +10,7 @@ import {
   Shield,
   CheckCircle,
   AlertCircle,
-  Award,
-  CreditCard
+  Award
 } from 'lucide-react';
 
 interface RegistrationFormProps {
@@ -26,7 +25,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    cpf: '',
     password: ''
   });
   
@@ -64,48 +62,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
     return 'low';
   };
 
-  const formatPhone = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length <= 11) {
-      return numbers.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
-    }
-    return value;
-  };
-
-  const formatCPF = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length <= 11) {
-      return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-    }
-    return value;
-  };
-
-  const validateCPF = (cpf: string): boolean => {
-    const numbers = cpf.replace(/\D/g, '');
-
-    if (numbers.length !== 11) return false;
-    if (/^(\d)\1{10}$/.test(numbers)) return false;
-
-    let sum = 0;
-    let remainder;
-
-    for (let i = 1; i <= 9; i++) {
-      sum += parseInt(numbers.substring(i - 1, i)) * (11 - i);
-    }
-    remainder = (sum * 10) % 11;
-    if (remainder === 10 || remainder === 11) remainder = 0;
-    if (remainder !== parseInt(numbers.substring(9, 10))) return false;
-
-    sum = 0;
-    for (let i = 1; i <= 10; i++) {
-      sum += parseInt(numbers.substring(i - 1, i)) * (12 - i);
-    }
-    remainder = (sum * 10) % 11;
-    if (remainder === 10 || remainder === 11) remainder = 0;
-    if (remainder !== parseInt(numbers.substring(10, 11))) return false;
-
-    return true;
-  };
 
   const validateField = (field: string, value: string) => {
     const newErrors = { ...errors };
@@ -133,18 +89,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
         }
         break;
 
-      case 'cpf':
-        if (!value.trim()) {
-          newErrors.cpf = 'CPF é obrigatório';
-        } else if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(value)) {
-          newErrors.cpf = 'Formato: 000.000.000-00';
-        } else if (!validateCPF(value)) {
-          newErrors.cpf = 'CPF inválido';
-        } else {
-          delete newErrors.cpf;
-        }
-        break;
-
       case 'password':
         if (!value.trim()) {
           newErrors.password = 'Senha é obrigatória';
@@ -160,13 +104,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
   };
 
   const handleFieldChange = (field: string, value: string) => {
-    let formattedValue = value;
-
-    if (field === 'cpf') {
-      formattedValue = formatCPF(value);
-    }
-
-    setFormData(prev => ({ ...prev, [field]: formattedValue }));
+    setFormData(prev => ({ ...prev, [field]: value }));
 
     if (touched[field]) {
       validateField(field, formattedValue);
@@ -183,12 +121,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
     e.preventDefault();
 
     // Validate all fields
-    const allTouched = { name: true, email: true, cpf: true, password: true };
+    const allTouched = { name: true, email: true, password: true };
     setTouched(allTouched);
 
     validateField('name', formData.name);
     validateField('email', formData.email);
-    validateField('cpf', formData.cpf);
     validateField('password', formData.password);
 
     // Check if there are any errors
@@ -205,7 +142,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
       id: `user_${Date.now()}`,
       name: formData.name,
       email: formData.email,
-      cpf: formData.cpf,
       registeredAt: new Date()
     };
 
@@ -270,10 +206,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                   <span className="text-white font-bold text-xs drop-shadow-lg">BÔNUS EXCLUSIVO</span>
                 </div>
                 <div className="text-xl font-bold text-white mb-0.5 drop-shadow-2xl">
-                  R$ 16,90
+                  R$ 14,70
                 </div>
                 <div className="text-white/90 text-xs font-medium drop-shadow-lg">
-                  + 1 Raspadinha Premium
+                  + 3 Raspadinhas Premium
                 </div>
               </div>
             </div>
@@ -375,43 +311,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                 )}
               </div>
 
-              {/* CPF Field */}
-              <div className="relative">
-                <div className={`relative transition-all duration-300 ${focusedField === 'cpf' ? 'scale-[1.01]' : ''}`}>
-                  <CreditCard className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10 ${
-                    focusedField === 'cpf' ? 'text-accent' : 'text-white/50'
-                  }`} />
-                  <input
-                    type="text"
-                    value={formData.cpf}
-                    onChange={(e) => handleFieldChange('cpf', e.target.value)}
-                    onFocus={() => setFocusedField('cpf')}
-                    onBlur={() => handleFieldBlur('cpf')}
-                    className={`w-full pl-10 pr-10 py-2.5 bg-white/10 backdrop-blur-sm rounded-lg border-2 transition-all duration-300 text-white text-sm placeholder-white/50 focus:outline-none ${
-                      errors.cpf && touched.cpf
-                        ? 'border-red-500 bg-red-500/10 shadow-lg shadow-red-500/20'
-                        : focusedField === 'cpf'
-                        ? 'border-accent bg-accent/10 shadow-lg shadow-accent/20'
-                        : 'border-white/20 hover:border-white/30 hover:bg-white/15'
-                    }`}
-                    placeholder="CPF: 000.000.000-00"
-                    maxLength={14}
-                    inputMode="numeric"
-                  />
-                  {formData.cpf && !errors.cpf && touched.cpf && (
-                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-accent animate-pulse" />
-                  )}
-                </div>
-                {errors.cpf && touched.cpf && (
-                  <div className="flex items-center gap-1.5 mt-1 text-red-400 text-xs animate-slide-in-right">
-                    <AlertCircle className="w-3 h-3" />
-                    <span>{errors.cpf}</span>
-                  </div>
-                )}
-              </div>
 
               {/* Password Field */}
               <div className="relative">
+                <label className="block text-white/90 font-bold mb-2 text-xs">
+                  Crie sua Senha de Acesso
+                </label>
                 <div className={`relative transition-all duration-300 ${focusedField === 'password' ? 'scale-[1.01]' : ''}`}>
                   <Shield className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 z-10 ${
                     focusedField === 'password' ? 'text-accent' : 'text-white/50'
@@ -429,7 +334,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                         ? 'border-accent bg-accent/10 shadow-lg shadow-accent/20'
                         : 'border-white/20 hover:border-white/30 hover:bg-white/15'
                     }`}
-                    placeholder="Senha (mínimo 6 caracteres)"
+                    placeholder="Crie sua senha (mínimo 6 caracteres)"
                     autoComplete="new-password"
                   />
                   {formData.password && !errors.password && touched.password && (
