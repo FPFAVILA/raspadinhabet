@@ -25,6 +25,7 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
   }, []);
 
   const handleClaimPrize = () => {
+    onAddToBalance(prizeValue);
     onClose();
   };
 

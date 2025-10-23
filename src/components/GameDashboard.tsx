@@ -105,9 +105,9 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     completeCard(card);
 
     if (card.hasWon) {
-      if (card.prizeType === 'iphone') {
+      if (card.prizeType === 'applewatch') {
         setShowWinningScreen(true);
-      } else if (card.prizeAmount && card.prizeAmount > 0) {
+      } else if (card.prizeType === 'money' && card.prizeAmount && card.prizeAmount > 0) {
         setWonAmount(card.prizeAmount);
         setShowMoneyPrizeModal(true);
       }
