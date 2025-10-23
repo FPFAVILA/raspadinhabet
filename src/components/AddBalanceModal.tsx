@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { X, Copy, QrCode, CreditCard, Smartphone, CheckCircle } from 'lucide-react';
-import { useFictionalPix } from '../hooks/useFictionalPix';
 import { QRCodeGenerator } from './QRCodeGenerator';
 
 interface AddBalanceModalProps {
@@ -19,7 +18,14 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
   message
 }) => {
   const [amount, setAmount] = useState('');
-  const { loading, error, pixData, createPix, reset } = useFictionalPix();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pixData, setPixData] = useState<{
+    qrcode: string;
+    qrCodeImage: string;
+    amount: number;
+    transactionId: string;
+  } | null>(null);
   const [copied, setCopied] = useState(false);
   const [isCheckingPayment, setIsCheckingPayment] = useState(false);
   const [paymentCheckInterval, setPaymentCheckInterval] = useState<NodeJS.Timeout | null>(null);
@@ -64,23 +70,55 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
         setPaymentCheckInterval(null);
       }
       setIsCheckingPayment(false);
-      reset();
+      setPixData(null);
+      setError(null);
       setAmount('');
       setCopied(false);
     }
-  }, [isOpen, paymentCheckInterval, reset]);
+  }, [isOpen, paymentCheckInterval]);
 
   // Se modal não está aberto, não renderizar nada
   if (!isOpen) return null;
 
   const generatePix = async () => {
     const paymentAmount = parseFloat(amount.replace(',', '.'));
-    if (paymentAmount < 20) return;
+    if (paymentAmount < 0.5) return;
+
+    setLoading(true);
+    setError(null);
+    setPixData(null);
 
     try {
-      await createPix(paymentAmount);
+      const valueInCents = Math.round(paymentAmount * 100);
+
+      const response = await fetch('/api/create-pix', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ value: valueInCents })
+      });
+
+      const data = await response.json();
+
+      if (!data.ok) {
+        setError(data.error || 'Erro ao gerar PIX');
+        setLoading(false);
+        return;
+      }
+
+      setPixData({
+        qrcode: data.qr_code,
+        qrCodeImage: data.qr_code_base64,
+        amount: data.value / 100,
+        transactionId: data.id
+      });
+
+      setLoading(false);
     } catch (err) {
       console.error('Erro ao gerar PIX:', err);
+      setError('Erro de conexão. Tente novamente.');
+      setLoading(false);
     }
   };
 
@@ -172,7 +210,7 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
                   />
                 </div>
                 <p className="text-sm text-gray-500 mt-1 text-center">
-                  Valor mínimo: R$ 20,00
+                  Valor mínimo: R$ 0,50
                 </p>
               </div>
 
@@ -220,7 +258,7 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
               {/* Botão Gerar PIX */}
               <button
                 onClick={generatePix}
-                disabled={!amount || parseFloat(amount.replace(',', '.')) < 20 || loading}
+                disabled={!amount || parseFloat(amount.replace(',', '.')) < 0.5 || loading}
                 className="w-full bg-accent text-white font-bold py-4 rounded-xl hover:bg-accent-hover transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-modern hover-lift active:scale-95 relative overflow-hidden"
                 style={{ touchAction: 'manipulation' }}
               >
@@ -267,14 +305,17 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
               {/* QR Code */}
               <div className="bg-gray-100 rounded-xl p-4 text-center border border-gray-200 shadow-inner">
                 <div className="bg-white rounded-lg p-4 shadow-lg inline-block border border-gray-100">
-                  <QRCodeGenerator 
-                    value={pixData.qrcode}
-                    size={160}
-                    className="mx-auto"
+                  <img
+                    src={pixData.qrCodeImage}
+                    alt="QR Code PIX"
+                    className="w-40 h-40 mx-auto"
                   />
                 </div>
                 <p className="text-sm text-gray-600 mt-3 font-medium">
                   📱 Escaneie com o app do seu banco
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  ID: {pixData.transactionId}
                 </p>
               </div>
 
