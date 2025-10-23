@@ -166,7 +166,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
 
   // Se ganhou iPhone, mostrar tela de vitória
   if (showWinningScreen) {
-    return <WinningScreen user={user} onClose={() => setShowWinningScreen(false)} />;
+    return <WinningScreen user={user} onClose={() => setShowWinningScreen(false)} onAddToBalance={addBalance} />;
   }
 
   return (

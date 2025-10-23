@@ -1,114 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Trophy, Clock, ShieldCheck, Package, Star, Crown, Gift, Sparkles, Award } from 'lucide-react';
+import { Trophy, ShieldCheck, Sparkles, Award, Zap, Star } from 'lucide-react';
 import { User } from '../types';
 
 interface WinningScreenProps {
   user: User;
   onClose: () => void;
+  onAddToBalance: (amount: number) => void;
 }
 
-export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose }) => {
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutos
+export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onAddToBalance }) => {
   const [confetti, setConfetti] = useState(true);
-  const [pulseAnimation, setPulseAnimation] = useState(true);
   const [showCelebration, setShowCelebration] = useState(true);
-  const [shouldScrollToButton, setShouldScrollToButton] = useState(false);
+  const prizeValue = 4899.00;
 
-  // Timer countdown
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Efeitos iniciais
-  useEffect(() => {
-    // Vibração se disponível
     if ('vibrate' in navigator) {
       navigator.vibrate([200, 100, 200, 100, 200]);
     }
 
-    // Desabilitar confetti após 8 segundos
-    const confettiTimeout = setTimeout(() => setConfetti(false), 8000);
-    
-    // Alternar animação de pulso
-    const pulseInterval = setInterval(() => {
-      setPulseAnimation(prev => !prev);
-    }, 2000);
+    const confettiTimeout = setTimeout(() => setConfetti(false), 6000);
+    const celebrationTimeout = setTimeout(() => setShowCelebration(false), 3000);
 
-    // Celebração inicial
-    const celebrationTimeout = setTimeout(() => {
-      setShowCelebration(false);
-      // Após a celebração, fazer scroll suave para o botão
-      setTimeout(() => {
-        setShouldScrollToButton(true);
-      }, 500);
-    }, 5000);
-    
     return () => {
       clearTimeout(confettiTimeout);
-      clearInterval(pulseInterval);
       clearTimeout(celebrationTimeout);
     };
   }, []);
 
-  // Scroll automático para o botão após a celebração
-  useEffect(() => {
-    if (shouldScrollToButton) {
-      const buttonElement = document.getElementById('prize-button');
-      if (buttonElement) {
-        buttonElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center',
-          inline: 'nearest'
-        });
-      }
-    }
-  }, [shouldScrollToButton]);
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const generateRedemptionCode = () => {
-    return `IP13-${user.name.split(' ')[0].toUpperCase()}-${Date.now().toString().slice(-6)}`;
-  };
-
-  const handleStartRedemption = () => {
-    // Redirecionar para o link de resgate
-    window.location.href = 'https://pay.zkimport.store/zj6aGnA64VNZwlK';
+  const handleClaimPrize = () => {
+    onAddToBalance(prizeValue);
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-primary relative overflow-hidden z-50">
-      {/* Background Effects Premium */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gray-900/20"></div>
-        <div className="absolute inset-0 bg-accent/5"></div>
-      </div>
-      
-      {/* Confetti Animation Melhorado */}
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-3 z-50">
       {confetti && (
         <div className="fixed inset-0 pointer-events-none z-20">
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: 60 }).map((_, i) => (
             <div
               key={i}
               className={`absolute rounded-full animate-bounce ${
-                i % 6 === 0 ? 'w-3 h-3 bg-accent' :
-                i % 6 === 1 ? 'w-2 h-2 bg-green-400' :
-                i % 6 === 2 ? 'w-4 h-4 bg-green-300' :
-                i % 6 === 3 ? 'w-2 h-2 bg-green-500' :
-                i % 6 === 4 ? 'w-3 h-3 bg-yellow-400' : 'w-2 h-2 bg-green-200'
+                i % 5 === 0 ? 'w-3 h-3 bg-yellow-400' :
+                i % 5 === 1 ? 'w-2 h-2 bg-accent' :
+                i % 5 === 2 ? 'w-4 h-4 bg-yellow-300' :
+                i % 5 === 3 ? 'w-2 h-2 bg-orange-400' : 'w-3 h-3 bg-yellow-500'
               }`}
               style={{
                 left: `${Math.random() * 100}%`,
@@ -121,151 +56,114 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose }) =
         </div>
       )}
 
-      {/* Celebração Inicial */}
       {showCelebration && (
         <div className="fixed inset-0 flex items-center justify-center z-30 pointer-events-none">
           <div className="text-center animate-bounce">
-            <div className="text-8xl mb-4">🎉</div>
-            <div className="text-6xl font-bold text-white drop-shadow-2xl animate-pulse">
+            <div className="text-7xl mb-3">🎉</div>
+            <div className="text-5xl font-bold text-white drop-shadow-2xl animate-pulse">
               PARABÉNS!
             </div>
-            <div className="text-2xl text-indigo-200 mt-2 animate-pulse">
-              Você ganhou o iPhone!
+            <div className="text-xl text-yellow-300 mt-2 animate-pulse font-bold">
+              PRÊMIO ULTRA RARO!
             </div>
           </div>
         </div>
       )}
 
-      <div className="relative z-30 min-h-screen p-2 safe-area-top safe-area-bottom overflow-y-auto">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto my-2 overflow-hidden border-2 border-indigo-300/50">
-          {/* Header Premium com Crown */}
-          <div className="bg-accent p-3 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-accent/80"></div>
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden relative">
+        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse z-10">
+          ULTRA RARO
+        </div>
+
+        <div className="absolute top-2 right-2 z-10">
+          <div className="flex gap-0.5">
+            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 animate-pulse" />
+            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 animate-pulse" style={{ animationDelay: '0.1s' }} />
+            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400 animate-pulse" style={{ animationDelay: '0.2s' }} />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-accent via-accent to-accent-hover p-5 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" style={{ animationDuration: '2s' }} />
+
+          <div className="relative">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 animate-bounce border-2 border-white/50">
+              <Trophy className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">GRANDE PRÊMIO!</h1>
+            <p className="text-white/90 text-sm font-semibold">Você ganhou um prêmio RARÍSSIMO!</p>
+          </div>
+        </div>
+
+        <div className="p-5 text-center">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-5 mb-4 border-2 border-yellow-400/50 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl"></div>
+
             <div className="relative">
-              <div className="flex items-center justify-center mb-2">
-                <Crown className={`w-10 h-10 text-white mx-auto ${pulseAnimation ? 'animate-pulse' : ''}`} />
-              </div>
-              <h1 className="text-lg font-bold text-white mb-1.5 drop-shadow-lg">PARABÉNS!</h1>
-              <p className="text-white/95 text-sm font-semibold drop-shadow">Você é nosso grande vencedor!</p>
-              <div className="flex items-center justify-center gap-1.5 mt-1.5">
-                <Star className="w-3.5 h-3.5 text-green-200" />
-                <span className="text-green-200 text-xs font-bold">PRÊMIO EXCLUSIVO</span>
-                <Star className="w-3.5 h-3.5 text-green-200" />
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="p-3 space-y-3">
-            {/* Prize Display */}
-            <div className="text-center">
-              <div className="bg-gray-900 rounded-xl p-3 mb-2 relative overflow-hidden border border-gray-700">
-                <div className="absolute inset-0 bg-accent/10"></div>
-                <div className="absolute top-1.5 right-1.5">
-                  <Gift className="w-5 h-5 text-accent animate-bounce" />
-                </div>
+              <div className="flex justify-center mb-3">
                 <div className="relative">
-                  <div className="mb-2 flex justify-center">
-                    <img
-                      src="/iphone_13_PNG31.png"
-                      alt="iPhone 13 Pro Max"
-                      className="w-20 h-20 object-contain rounded-lg shadow-2xl"
-                    />
-                  </div>
-                  <h2 className="text-base font-bold text-white mb-0.5">iPhone 13 Pro Max</h2>
-                  <p className="text-gray-300 text-xs font-medium">128GB - Prata</p>
-                  <div className="bg-accent text-white px-3 py-1.5 rounded-full text-xs font-bold mt-2 inline-block shadow-modern">
-                    R$ 4.899,00
+                  <img
+                    src="/iphone_13_PNG31.png"
+                    alt="iPhone 13 Pro Max"
+                    className="w-32 h-32 object-contain drop-shadow-2xl"
+                  />
+                  <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                    NOVO
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 text-xs font-medium">
-                Premiação exclusiva e limitada!
-              </p>
-            </div>
 
-            {/* Winner Certificate */}
-            <div className="bg-green-50 rounded-xl p-2.5 border border-green-200 shadow-inner">
-              <div className="flex items-center gap-1.5 mb-2">
-                <Award className="w-4 h-4 text-green-600" />
-                <span className="font-bold text-green-800 text-xs">Certificado de Premiação</span>
-              </div>
-              <div className="space-y-1.5 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ganhador:</span>
-                  <span className="font-bold text-gray-800 text-right">{user.name}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Prêmio:</span>
-                  <span className="font-bold text-gray-800">iPhone 13 Pro Max</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Valor:</span>
-                  <span className="font-bold text-accent">R$ 4.899,00</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Data:</span>
-                  <span className="font-bold text-gray-800">{new Date().toLocaleDateString('pt-BR')}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Código:</span>
-                  <span className="font-mono text-xs bg-green-100 px-1.5 py-0.5 rounded border border-green-300">
-                    {generateRedemptionCode()}
-                  </span>
-                </div>
-              </div>
-            </div>
+              <h2 className="text-xl font-bold text-white mb-1">iPhone 13 Pro Max</h2>
+              <p className="text-gray-300 text-sm mb-3">128GB - Cor: Prata</p>
 
-            {/* Trust Seals */}
-            <div className="flex justify-center gap-2">
-              <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-green-50 px-2.5 py-1.5 rounded-full border border-green-200">
-                <ShieldCheck className="w-3 h-3 text-green-500" />
-                <span className="font-medium">Verificado</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-blue-50 px-2.5 py-1.5 rounded-full border border-blue-200">
-                <Sparkles className="w-3 h-3 text-blue-500" />
-                <span className="font-medium">Exclusivo</span>
-              </div>
-            </div>
-
-            {/* Urgency Timer */}
-            <div className="bg-red-50 border border-red-200 rounded-xl p-2.5 shadow-inner">
-              <div className="flex items-center justify-center gap-1.5 mb-2">
-                <Clock className="w-4 h-4 text-red-500 animate-pulse" />
-                <span className="font-bold text-red-700 text-xs">Oferta expira em:</span>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-red-600 mb-1 font-mono">
-                  {formatTime(timeLeft)}
-                </div>
-                <p className="text-red-600 text-xs font-medium">
-                  Oferta limitada! Resgate agora!
-                </p>
+              <div className="bg-accent text-white px-4 py-2 rounded-full text-lg font-bold inline-block shadow-lg">
+                R$ 4.899,00
               </div>
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="p-3 pt-0">
-            <button
-              id="prize-button"
-              onClick={handleStartRedemption}
-             className={`w-full bg-accent text-white font-bold py-4 rounded-xl hover:bg-accent-hover transition-all active:scale-95 shadow-modern text-base hover-lift relative overflow-hidden ${
-                pulseAnimation ? 'animate-pulse' : ''
-              }`}
-              style={{ touchAction: 'manipulation' }}
-            >
-              <div className="relative flex items-center justify-center gap-2">
-                <Package className="w-5 h-5" />
-                <span>RESGATAR MEU PRÊMIO</span>
-                <Trophy className="w-5 h-5" />
-              </div>
-            </button>
-
-            <p className="text-center text-xs text-gray-500 font-medium mt-2">
-              Ao clicar, você será redirecionado para finalizar sua premiação de forma segura.
+          <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-3 mb-4">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Zap className="w-5 h-5 text-yellow-600" />
+              <span className="font-bold text-yellow-800 text-sm">Prêmio Especial</span>
+            </div>
+            <p className="text-yellow-700 text-xs font-medium leading-relaxed">
+              Apenas 0.01% dos jogadores ganham este prêmio! Você é um dos sortudos!
             </p>
           </div>
+
+          <div className="flex justify-center gap-2 mb-4">
+            <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+              <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+              <span className="font-medium">Verificado</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-purple-50 px-3 py-1.5 rounded-full border border-purple-200">
+              <Award className="w-3.5 h-3.5 text-purple-500" />
+              <span className="font-medium">Premium</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-gray-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-200">
+              <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+              <span className="font-medium">Exclusivo</span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleClaimPrize}
+            className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-4 rounded-xl hover:scale-[1.02] transition-all active:scale-95 shadow-2xl relative overflow-hidden group"
+            style={{ touchAction: 'manipulation' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+
+            <div className="relative flex items-center justify-center gap-2">
+              <Trophy className="w-5 h-5 animate-bounce" />
+              <span>ADICIONAR AO SALDO</span>
+              <Trophy className="w-5 h-5 animate-bounce" />
+            </div>
+          </button>
+
+          <p className="text-center text-xs text-gray-500 mt-3">
+            O valor será creditado instantaneamente
+          </p>
         </div>
       </div>
     </div>
