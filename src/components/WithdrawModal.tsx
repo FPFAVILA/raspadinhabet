@@ -215,7 +215,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
                 <span className="text-yellow-800 font-bold text-sm">Verificação Necessária</span>
               </div>
               <p className="text-yellow-700 text-sm mb-3">
-                Para realizar saques com saldo acima de R$ 40,00, você precisa verificar sua conta (KYC). Este processo é rápido e garante a segurança das suas transações.
+                Para realizar saques com saldo acima de R$ 1000,00, você precisa verificar sua conta (KYC). Este processo é rápido e garante a segurança das suas transações.
               </p>
               <button
                 onClick={handleOpenKYCModal}
