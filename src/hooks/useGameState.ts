@@ -2,40 +2,34 @@ import { useState, useEffect, useCallback } from 'react';
 import { GameState, ScratchCard, ScratchBlock } from '../types';
 
 const GAME_STATE_KEY = 'raspadinha_game_state';
-const REGISTRATION_BONUS_KEY = 'raspadinha_registration_bonus';
-const INITIAL_BALANCE = 0;
 const CARD_COST = 4.90;
 
 // Lógica de vitória - Rodadas premiadas: 3ª (R$30), 7ª (R$20), 12ª (iPhone)
 const getWinLogic = (roundNumber: number) => {
-  // Rodadas 1 e 2 - não ganham
-  if (roundNumber === 1) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 2) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  console.log('🎮 Verificando lógica para rodada:', roundNumber);
 
   // Rodada 3 - ganha R$ 30,00
-  if (roundNumber === 3) return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
-
-  // Rodadas 4, 5, 6 - não ganham
-  if (roundNumber === 4) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 5) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 6) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 3) {
+    console.log('💰 Rodada 3: Vai ganhar R$ 30,00');
+    return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
+  }
 
   // Rodada 7 - ganha R$ 20,00
-  if (roundNumber === 7) return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
-
-  // Rodadas 8, 9, 10, 11 - não ganham
-  if (roundNumber === 8) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 9) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 10) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
-  if (roundNumber === 11) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 7) {
+    console.log('💰 Rodada 7: Vai ganhar R$ 20,00');
+    return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
+  }
 
   // Rodada 12 - ganha iPhone
-  if (roundNumber === 12) return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
+  if (roundNumber === 12) {
+    console.log('📱 Rodada 12: Vai ganhar iPhone');
+    return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
+  }
 
-  // Rodadas 13+ - não ganham mais nada
+  // Todas as outras rodadas não ganham
+  console.log('❌ Rodada', roundNumber, ': Não ganha nada');
   return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 };
-
 
 const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone'): ScratchCard => {
   const grid: ScratchBlock[] = [];
@@ -59,7 +53,7 @@ const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone')
 
   const allSymbols = [...moneySymbols, ...appleImages];
 
-  // Criar padrão vencedor (linha horizontal no meio)
+  // Criar padrão vencedor (linha horizontal no meio - posições 3, 4, 5)
   for (let i = 0; i < 9; i++) {
     const isWinningPosition = i >= 3 && i <= 5;
     grid.push({
@@ -137,13 +131,13 @@ const wouldCreateWinningPattern = (grid: ScratchBlock[], position: number, symbo
     symbol,
     position: { x: position % 3, y: Math.floor(position / 3) }
   };
-  
+
   const patterns = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontais
     [0, 3, 6], [1, 4, 7], [2, 5, 8], // Verticais
     [0, 4, 8], [2, 4, 6] // Diagonais
   ];
-  
+
   return patterns.some(pattern => {
     const symbols = pattern.map(i => tempGrid[i]?.symbol).filter(Boolean);
     return symbols.length === 3 && symbols.every(s => s === symbols[0]);
@@ -152,58 +146,62 @@ const wouldCreateWinningPattern = (grid: ScratchBlock[], position: number, symbo
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
-    balance: INITIAL_BALANCE,
+    balance: 0,
     scratchCardsUsed: 0,
     hasWonIphone: false
   });
-  
+
   const [isNewUser, setIsNewUser] = useState(true);
 
+  // Carregar estado do jogo do localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem(GAME_STATE_KEY);
-      const hasBonus = localStorage.getItem(REGISTRATION_BONUS_KEY);
 
       if (saved) {
         const parsedState = JSON.parse(saved);
+        console.log('📊 Estado carregado:', parsedState);
         setGameState(parsedState);
         setIsNewUser(false);
-      } else if (!hasBonus) {
-        setGameState({
-          balance: 0,
-          scratchCardsUsed: 0,
-          hasWonIphone: false
-        });
-        setIsNewUser(false);
+      } else {
+        console.log('🆕 Novo usuário - sem estado salvo');
       }
     } catch (error) {
-      console.error('Erro ao carregar estado do jogo:', error);
+      console.error('❌ Erro ao carregar estado do jogo:', error);
     }
   }, []);
 
+  // Salvar estado no localStorage sempre que mudar
   const saveGameState = useCallback((newState: GameState) => {
     try {
+      console.log('💾 Salvando estado:', newState);
       localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
       setGameState(newState);
     } catch (error) {
-      console.error('Erro ao salvar estado do jogo:', error);
+      console.error('❌ Erro ao salvar estado do jogo:', error);
     }
   }, []);
 
+  // Iniciar nova carta
   const startNewCard = useCallback((): ScratchCard | null => {
-    const newRound = gameState.scratchCardsUsed + 1;
-    const winLogic = getWinLogic(newRound);
-
-    // Verificar se tem saldo suficiente (não há mais rodadas grátis)
+    // Verificar se tem saldo suficiente
     if (gameState.balance < CARD_COST) {
+      console.log('❌ Saldo insuficiente:', gameState.balance);
       return null;
     }
 
+    const newRound = gameState.scratchCardsUsed + 1;
+    console.log('🎮 Iniciando rodada:', newRound);
+
+    const winLogic = getWinLogic(newRound);
+
+    // Gerar carta baseada na lógica de vitória
     const card = winLogic.shouldWin
       ? generateWinningCard(winLogic.prizeAmount, winLogic.prizeType as 'money' | 'iphone')
       : generateLosingCard();
 
-    const newState = {
+    // Atualizar estado: descontar o custo e incrementar rodadas
+    const newState: GameState = {
       ...gameState,
       balance: gameState.balance - CARD_COST,
       scratchCardsUsed: newRound
@@ -213,22 +211,32 @@ export const useGameState = () => {
     return card;
   }, [gameState, saveGameState]);
 
+  // Completar carta e adicionar prêmio
   const completeCard = useCallback((card: ScratchCard) => {
-    if (!card.hasWon) return;
+    console.log('✅ Completando carta:', card);
+
+    if (!card.hasWon) {
+      console.log('😢 Carta perdedora - sem prêmio');
+      return;
+    }
 
     let newState = { ...gameState };
 
     if (card.prizeType === 'iphone') {
+      console.log('🎁 GANHOU IPHONE!');
       newState.hasWonIphone = true;
-    } else if (card.prizeAmount) {
+    } else if (card.prizeAmount && card.prizeAmount > 0) {
+      console.log('💰 Ganhou R$', card.prizeAmount);
       newState.balance += card.prizeAmount;
     }
 
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
+  // Adicionar saldo
   const addBalance = useCallback((amount: number) => {
-    const newState = {
+    console.log('💵 Adicionando saldo:', amount);
+    const newState: GameState = {
       ...gameState,
       balance: gameState.balance + amount
     };
