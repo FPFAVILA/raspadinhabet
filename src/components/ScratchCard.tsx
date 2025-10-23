@@ -21,7 +21,6 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({ card, onComplete }) =>
   const [scratchedPercentage, setScratchedPercentage] = useState(0);
   const [showWinAnimation, setShowWinAnimation] = useState(false);
   const [winningPattern, setWinningPattern] = useState<number[]>([]);
-  const [isFullscreen, setIsFullscreen] = useState(true);
   const [canvasInitialized, setCanvasInitialized] = useState(false);
   const [showAllRevealed, setShowAllRevealed] = useState(false);
   const [showLoseMessage, setShowLoseMessage] = useState(false);

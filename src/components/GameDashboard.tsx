@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { User } from '../types';
 import { useGameState } from '../hooks/useGameState';
-import { useSocialProof } from '../hooks/useSocialProof';
 import { ScratchCard } from './ScratchCard';
 import { AddBalanceModal } from './AddBalanceModal';
 import { WinningScreen } from './WinningScreen';
 import { WithdrawModal } from './WithdrawModal';
 import { SocialProofNotifications } from './SocialProofNotifications';
 import { PrizesSection } from './PrizesSection';
+import { MoneyPrizeModal } from './MoneyPrizeModal';
 import {
   Play,
   Plus,
-  Sparkles,
   Coins,
   Crown,
   Zap,
@@ -23,114 +21,8 @@ interface GameDashboardProps {
   user: User | null;
 }
 
-// Modal de Prêmio em Dinheiro
-interface MoneyPrizeModalProps {
-  isOpen: boolean;
-  amount: number;
-  onClose: () => void;
-}
-
-const MoneyPrizeModal: React.FC<MoneyPrizeModalProps> = ({ isOpen, amount, onClose }) => {
-  const [confetti, setConfetti] = useState(true);
-
-  useEffect(() => {
-    if (isOpen) {
-      // Vibração se disponível
-      if ('vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200, 100, 200]);
-      }
-
-      // Desabilitar confetti após 5 segundos
-      const confettiTimeout = setTimeout(() => setConfetti(false), 5000);
-
-      return () => clearTimeout(confettiTimeout);
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 z-50">
-      {/* Confetti Animation */}
-      {confetti && (
-        <div className="fixed inset-0 pointer-events-none z-20">
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div
-              key={i}
-              className={`absolute rounded-full animate-bounce ${
-                i % 4 === 0 ? 'w-3 h-3 bg-accent' :
-                i % 4 === 1 ? 'w-2 h-2 bg-green-400' :
-                i % 4 === 2 ? 'w-4 h-4 bg-yellow-400' : 'w-2 h-2 bg-green-300'
-              }`}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`
-              }}
-            />
-          ))}
-        </div>
-      )}
-
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xs overflow-hidden">
-        {/* Header */}
-        <div className="bg-accent p-4 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-accent/80"></div>
-          <div className="relative">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 animate-bounce">
-              <Coins className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-white mb-1">🎉 PARABÉNS! 🎉</h1>
-            <p className="text-white/90 text-base">Você ganhou dinheiro!</p>
-          </div>
-        </div>
-
-        {/* Conteúdo */}
-        <div className="p-4 text-center">
-          <div className="bg-accent/20 rounded-2xl p-4 mb-4 border border-accent/50">
-            <div className="text-4xl mb-3">💰</div>
-            <div className="text-3xl font-bold text-accent mb-2">
-              R$ {amount.toFixed(2).replace('.', ',')}
-            </div>
-            <p className="text-gray-600 font-medium">
-              Adicionado ao seu saldo!
-            </p>
-          </div>
-
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-accent rounded-full"></div>
-              <span>Saldo atualizado automaticamente</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-accent rounded-full"></div>
-              <span>Continue jogando para ganhar mais</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-accent rounded-full"></div>
-              <span>Próximo prêmio pode ser o iPhone!</span>
-            </div>
-          </div>
-
-          <button
-            onClick={onClose}
-            className="w-full bg-accent text-white font-bold py-3 rounded-2xl hover:bg-accent-hover transition-all duration-300 active:scale-95 shadow-modern"
-            style={{ touchAction: 'manipulation' }}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <Play className="w-5 h-5" />
-              <span>CONTINUAR JOGANDO</span>
-            </div>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
-  const navigate = useNavigate();
   const [hasValidRegistration, setHasValidRegistration] = useState(false);
   const [isCheckingRegistration, setIsCheckingRegistration] = useState(true);
 
@@ -175,7 +67,6 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
 
 
   // Verificar se precisa de saldo
-  const nextRound = gameState.scratchCardsUsed + 1;
   const needsBalance = gameState.balance < CARD_COST;
   
   // Calcular valor sugerido baseado na rodada
@@ -189,7 +80,6 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
   };
   
   const missingAmount = needsBalance ? CARD_COST - gameState.balance : 0;
-  const winChance = getNextRoundChance();
 
   const handlePlayGame = () => {
     // Se não tem saldo suficiente
