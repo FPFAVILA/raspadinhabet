@@ -193,9 +193,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                 </div>
               </div>
 
-              <div className="text-right">
-                <div className="text-xs text-white/70 mb-0.5">Bônus</div>
-                <div className="text-2xl font-bold text-white">R$ 14,70</div>
+              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/20">
+                <Gift className="w-4 h-4 text-white" />
+                <div className="text-lg font-bold text-white whitespace-nowrap">R$ 14,70</div>
               </div>
             </div>
           </div>
