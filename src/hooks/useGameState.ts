@@ -6,40 +6,36 @@ const REGISTRATION_BONUS_KEY = 'raspadinha_registration_bonus';
 const INITIAL_BALANCE = 0;
 const CARD_COST = 4.90;
 
-// Lógica de vitória otimizada e limpa
+// Lógica de vitória - Rodadas premiadas: 3ª (R$30), 7ª (R$20), 12ª (iPhone)
 const getWinLogic = (roundNumber: number) => {
-  if (roundNumber === 1) return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false }; // Primeira rodada - custa R$ 4,90 - não ganha
-  if (roundNumber === 2) return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money', isFree: false }; // Segunda rodada - ganha R$ 20
-  if (roundNumber === 3) return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false };
-  if (roundNumber === 4) return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false };
-  if (roundNumber === 5) return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false };
-  if (roundNumber === 6) return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false };
-  if (roundNumber === 7) return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone', isFree: false }; // Sétima rodada - ganha iPhone
+  // Rodadas 1 e 2 - não ganham
+  if (roundNumber === 1) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 2) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 
-  // Rodadas 8+ com 15% de chance
-  const shouldWin = Math.random() < 0.15;
-  if (shouldWin) {
-    const prizes = [30, 50, 100, 200];
-    const prizeAmount = prizes[Math.floor(Math.random() * prizes.length)];
-    return { shouldWin: true, prizeAmount, prizeType: 'money', isFree: false };
-  }
+  // Rodada 3 - ganha R$ 30,00
+  if (roundNumber === 3) return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
 
-  return { shouldWin: false, prizeAmount: 0, prizeType: 'money', isFree: false };
+  // Rodadas 4, 5, 6 - não ganham
+  if (roundNumber === 4) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 5) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 6) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+
+  // Rodada 7 - ganha R$ 20,00
+  if (roundNumber === 7) return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
+
+  // Rodadas 8, 9, 10, 11 - não ganham
+  if (roundNumber === 8) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 9) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 10) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+  if (roundNumber === 11) return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
+
+  // Rodada 12 - ganha iPhone
+  if (roundNumber === 12) return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
+
+  // Rodadas 13+ - não ganham mais nada
+  return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 };
 
-// Função para calcular a "chance" ilusória baseada na rodada
-const getWinChance = (roundNumber: number) => {
-  if (roundNumber === 1) return 25; // Primeira rodada - chance baixa
-  if (roundNumber === 2) return 58; // Segunda rodada - chance boa (vai ganhar R$ 20)
-  if (roundNumber === 3) return 28; // Terceira rodada - chance baixa
-  if (roundNumber === 4) return 32; // Quarta rodada - chance média
-  if (roundNumber === 5) return 30; // Quinta rodada - chance baixa
-  if (roundNumber === 6) return 35; // Sexta rodada - chance média
-  if (roundNumber === 7) return 68; // Sétima rodada - chance alta (iPhone)
-
-  // Rodadas 8+ - variação aleatória entre 25-60%
-  return Math.floor(Math.random() * 35) + 25;
-};
 
 const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone'): ScratchCard => {
   const grid: ScratchBlock[] = [];
@@ -239,17 +235,11 @@ export const useGameState = () => {
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
-  const getNextRoundChance = useCallback(() => {
-    const nextRound = gameState.scratchCardsUsed + 1;
-    return getWinChance(nextRound);
-  }, [gameState.scratchCardsUsed]);
-
   return {
     gameState,
     isNewUser,
     startNewCard,
     completeCard,
-    addBalance,
-    getNextRoundChance
+    addBalance
   };
 };

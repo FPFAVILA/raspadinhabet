@@ -44,7 +44,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     setIsCheckingRegistration(false);
   }, []);
 
-  const { gameState, startNewCard, completeCard, addBalance, getNextRoundChance } = useGameState();
+  const { gameState, startNewCard, completeCard, addBalance } = useGameState();
   const CARD_COST = 4.90;
   const [currentCard, setCurrentCard] = useState<any>(null);
   const [showAddBalanceModal, setShowAddBalanceModal] = useState(false);
