@@ -154,22 +154,22 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
   const timerUrgency = getTimerUrgency();
 
   return (
-    <div className="min-h-screen bg-primary flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-primary flex items-center justify-center p-3 sm:p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-10 -left-10 w-72 h-72 bg-accent/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute -bottom-10 -right-10 w-96 h-96 bg-accent/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-md relative z-10 my-4">
         {showSuccess && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-3xl">
-            <div className="bg-gradient-to-br from-accent to-accent-hover rounded-2xl p-8 text-center animate-scale-in border border-white/30 shadow-2xl">
-              <CheckCircle className="w-20 h-20 text-white mx-auto mb-4 animate-bounce" />
-              <h2 className="text-3xl font-bold text-white mb-3">Cadastro Realizado!</h2>
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-3xl mx-2 sm:mx-0">
+            <div className="bg-gradient-to-br from-accent to-accent-hover rounded-2xl p-6 sm:p-8 text-center animate-scale-in border border-white/30 shadow-2xl max-w-sm mx-4">
+              <CheckCircle className="w-16 h-16 sm:w-20 sm:h-20 text-white mx-auto mb-3 sm:mb-4 animate-bounce" />
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Cadastro Realizado!</h2>
 
-              <div className="bg-white/20 rounded-xl p-4 mb-3">
+              <div className="bg-white/20 rounded-xl p-3 sm:p-4 mb-3">
                 <div className="text-white/90 text-sm mb-1">Seu bônus inicial:</div>
-                <div className="text-4xl font-bold text-white mb-1">R$ 14,70</div>
+                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">R$ 14,70</div>
                 <div className="text-white/90 text-sm">3 Raspadinhas Grátis</div>
               </div>
 
@@ -179,37 +179,37 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
         )}
 
         <div className={`bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
-          <div className="relative bg-gradient-to-br from-accent via-accent to-accent-hover p-8 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-accent via-accent to-accent-hover p-5 sm:p-6 md:p-8 overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
-            <div className="relative flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                  <Crown className="w-8 h-8 text-white drop-shadow-lg" />
+            <div className="relative flex flex-col gap-3 sm:gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                  <Crown className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
                 </div>
-                <div className="text-left flex-1">
-                  <h1 className="text-2xl font-bold text-white drop-shadow-lg">RaspadinhaPRO</h1>
-                  <p className="text-white/90 text-base font-medium">Prêmios Reais</p>
+                <div className="text-left flex-1 min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-bold text-white drop-shadow-lg">RaspadinhaPRO</h1>
+                  <p className="text-white/90 text-sm sm:text-base font-medium">Prêmios Reais</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-2.5 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl border-2 border-white/30 shadow-lg hover:bg-white/25 transition-colors duration-300">
-                <Gift className="w-6 h-6 text-white drop-shadow-lg" />
-                <div className="text-2xl font-bold text-white whitespace-nowrap drop-shadow-lg">R$ 14,70</div>
+              <div className="flex items-center justify-center gap-2 sm:gap-2.5 bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl border-2 border-white/30 shadow-lg hover:bg-white/25 transition-colors duration-300">
+                <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-lg flex-shrink-0" />
+                <div className="text-xl sm:text-2xl font-bold text-white whitespace-nowrap drop-shadow-lg">R$ 14,70</div>
               </div>
             </div>
           </div>
 
-          <div className={`px-6 py-4 border-b border-gray-800 ${
+          <div className={`px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-800 ${
             timerUrgency === 'critical' ? 'bg-red-500/10' :
             timerUrgency === 'high' ? 'bg-orange-500/10' :
             'bg-gray-800/50'
           }`}>
-            <div className="flex items-center justify-center gap-3 text-base">
-              <Clock className="w-5 h-5 text-white/80" />
+            <div className="flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base flex-wrap">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 flex-shrink-0" />
               <span className="text-white/80 font-medium">Oferta expira em:</span>
-              <span className={`font-mono font-bold text-white px-3 py-1.5 rounded-lg text-lg ${
+              <span className={`font-mono font-bold text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-base sm:text-lg ${
                 timerUrgency === 'critical' ? 'bg-red-500/20 animate-pulse' : 'bg-white/10'
               }`}>
                 {formatTime(timeLeft)}
@@ -217,7 +217,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-5 sm:p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="relative">
                 <div className={`relative transition-all duration-300 ${focusedField === 'name' ? 'scale-[1.01]' : ''}`}>
@@ -230,7 +230,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('name', e.target.value)}
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => handleFieldBlur('name')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
+                    className={`w-full pl-11 sm:pl-12 pr-11 sm:pr-12 py-3.5 sm:py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base sm:text-lg ${
                       errors.name && touched.name
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'name'
@@ -263,7 +263,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('email', e.target.value)}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => handleFieldBlur('email')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
+                    className={`w-full pl-11 sm:pl-12 pr-11 sm:pr-12 py-3.5 sm:py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base sm:text-lg ${
                       errors.email && touched.email
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'email'
@@ -297,7 +297,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                     onChange={(e) => handleFieldChange('password', e.target.value)}
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => handleFieldBlur('password')}
-                    className={`w-full pl-12 pr-12 py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-lg ${
+                    className={`w-full pl-11 sm:pl-12 pr-11 sm:pr-12 py-3.5 sm:py-4 bg-gray-800/50 rounded-xl border-2 transition-all duration-300 text-white placeholder-gray-500 focus:outline-none text-base sm:text-lg ${
                       errors.password && touched.password
                         ? 'border-red-500 bg-red-500/10'
                         : focusedField === 'password'
@@ -322,21 +322,21 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               <button
                 type="submit"
                 disabled={isSubmitting || timeLeft === 0}
-                className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent/50 relative overflow-hidden group mt-8 text-lg"
+                className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-4 sm:py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent/50 relative overflow-hidden group mt-6 sm:mt-8 text-base sm:text-lg"
                 style={{ touchAction: 'manipulation' }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 <div className="relative flex items-center justify-center gap-2">
                   {isSubmitting ? (
                     <>
-                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Processando...</span>
                     </>
                   ) : timeLeft === 0 ? (
                     <span>Oferta Expirada</span>
                   ) : (
                     <>
-                      <Gift className="w-6 h-6 animate-bounce" />
+                      <Gift className="w-5 h-5 sm:w-6 sm:h-6 animate-bounce flex-shrink-0" />
                       <span className="drop-shadow-lg">
                         {timerUrgency === 'critical' ? 'GARANTIR AGORA!' : 'GARANTIR BÔNUS'}
                       </span>
@@ -346,24 +346,24 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               </button>
             </form>
 
-            <div className="mt-8 grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
-                <Gift className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
-                <div className="text-white text-sm font-medium">Prêmios Reais</div>
+            <div className="mt-6 sm:mt-8 grid grid-cols-3 gap-2.5 sm:gap-4">
+              <div className="text-center p-3 sm:p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-accent mx-auto mb-1.5 sm:mb-2 transition-transform duration-300 hover:scale-110" />
+                <div className="text-white text-xs sm:text-sm font-medium leading-tight">Prêmios Reais</div>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
-                <Award className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
-                <div className="text-white text-sm font-medium">Plataforma Regularizada</div>
+              <div className="text-center p-3 sm:p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Award className="w-6 h-6 sm:w-7 sm:h-7 text-accent mx-auto mb-1.5 sm:mb-2 transition-transform duration-300 hover:scale-110" />
+                <div className="text-white text-xs sm:text-sm font-medium leading-tight">Plataforma Regularizada</div>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
-                <Shield className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
-                <div className="text-white text-sm font-medium">Seguro</div>
+              <div className="text-center p-3 sm:p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-accent mx-auto mb-1.5 sm:mb-2 transition-transform duration-300 hover:scale-110" />
+                <div className="text-white text-xs sm:text-sm font-medium leading-tight">Seguro</div>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-center gap-2 text-gray-500 text-sm">
-              <Shield className="w-4 h-4" />
-              <span>Dados protegidos com criptografia SSL</span>
+            <div className="mt-5 sm:mt-6 flex items-center justify-center gap-2 text-gray-500 text-xs sm:text-sm">
+              <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+              <span className="text-center">Dados protegidos com criptografia SSL</span>
             </div>
           </div>
         </div>
