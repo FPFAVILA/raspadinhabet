@@ -77,7 +77,7 @@ const generateLosingCard = (): ScratchCard => {
     let symbol;
     let attempts = 0;
     do {
-      symbol = Math.random() < 0.7
+      symbol = Math.random() < 0.8
         ? moneySymbols[Math.floor(Math.random() * moneySymbols.length)]
         : appleImages[Math.floor(Math.random() * appleImages.length)];
       attempts++;
