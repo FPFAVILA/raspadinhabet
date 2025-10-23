@@ -10,7 +10,7 @@ interface WinningScreenProps {
 
 export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onAddToBalance }) => {
   const [confetti, setConfetti] = useState(true);
-  const prizeValue = 4899.00;
+  const prizeValue = 3499.00;
 
   useEffect(() => {
     if ('vibrate' in navigator) {
@@ -120,7 +120,7 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
               <Trophy className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-lg font-bold text-white mb-0.5">🎉 PARABÉNS! 🎉</h1>
-            <p className="text-white/90 text-sm">Você ganhou um iPhone!</p>
+            <p className="text-white/90 text-sm">Você ganhou um Apple Watch!</p>
           </div>
         </div>
 
@@ -132,8 +132,8 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
               <div className="mb-1.5 flex justify-center">
                 <div className="relative">
                   <img
-                    src="/iphone_13_PNG31.png"
-                    alt="iPhone 13 Pro Max"
+                    src="/Apple-Watch-PNG-High-Quality-Image.png"
+                    alt="Apple Watch Series 9"
                     className="w-20 h-20 object-contain drop-shadow-2xl"
                   />
                   <div className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[9px] font-bold px-1 py-0.5 rounded-full animate-pulse">
@@ -142,11 +142,11 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
                 </div>
               </div>
 
-              <h2 className="text-sm font-bold text-white mb-0.5">iPhone 13 Pro Max</h2>
-              <p className="text-gray-300 text-[11px] mb-1.5">128GB - Cor: Prata</p>
+              <h2 className="text-sm font-bold text-white mb-0.5">Apple Watch Series 9</h2>
+              <p className="text-gray-300 text-[11px] mb-1.5">45mm - GPS - Meia-Noite</p>
 
               <div className="bg-accent text-white px-2.5 py-1 rounded-full text-sm font-bold inline-block shadow-lg">
-                R$ 4.899,00
+                R$ 3.499,00
               </div>
             </div>
           </div>
