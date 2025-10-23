@@ -11,7 +11,6 @@ import { MoneyPrizeModal } from './MoneyPrizeModal';
 import {
   Play,
   Plus,
-  Coins,
   Crown,
   Zap,
   Banknote
@@ -201,22 +200,11 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
             
             <div className="relative z-10">
               <div className="text-center mb-4">
-                <p className="text-gray-300 text-sm font-semibold mb-2 flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4" />
+                <p className="text-gray-300 text-sm font-semibold mb-2">
                   Saldo Disponível
                 </p>
-                <div className="flex items-center justify-center gap-3 mb-3">
-                  <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center shadow-modern">
-                    <Coins className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="text-4xl font-bold text-white">
-                    R$ {gameState.balance.toFixed(2).replace('.', ',')}
-                  </div>
-                </div>
-                <div className="bg-accent/20 rounded-2xl px-4 py-2 border border-accent/50 inline-block">
-                  <span className="text-accent text-sm font-bold">
-                    {Math.floor(gameState.balance / CARD_COST)} jogos disponíveis
-                  </span>
+                <div className="text-4xl font-bold text-white">
+                  R$ {gameState.balance.toFixed(2).replace('.', ',')}
                 </div>
               </div>
 
