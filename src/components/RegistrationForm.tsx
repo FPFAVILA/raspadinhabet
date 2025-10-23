@@ -167,15 +167,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
               <CheckCircle className="w-20 h-20 text-white mx-auto mb-4 animate-bounce" />
               <h2 className="text-3xl font-bold text-white mb-3">Cadastro Realizado!</h2>
 
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-5 mb-4 border border-white/30">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Gift className="w-5 h-5 text-white" />
-                  <div className="text-white/90 text-sm font-medium">Seu bônus inicial</div>
-                </div>
-                <div className="text-5xl font-bold text-white mb-2">R$ 14,70</div>
-                <div className="bg-white/20 rounded-lg px-3 py-1 inline-block">
-                  <div className="text-white text-sm font-bold">3 Raspadinhas Grátis</div>
-                </div>
+              <div className="bg-white/20 rounded-xl p-4 mb-3">
+                <div className="text-white/90 text-sm mb-1">Seu bônus inicial:</div>
+                <div className="text-4xl font-bold text-white mb-1">R$ 14,70</div>
+                <div className="text-white/90 text-sm">3 Raspadinhas Grátis</div>
               </div>
 
               <p className="text-white/90 text-sm">Redirecionando...</p>
@@ -198,8 +193,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                 </div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/20">
-                <div className="text-xs text-white/90 mb-0.5 font-medium">Bônus Inicial</div>
+              <div className="text-right">
+                <div className="text-xs text-white/70 mb-0.5">Bônus</div>
                 <div className="text-2xl font-bold text-white">R$ 14,70</div>
               </div>
             </div>
