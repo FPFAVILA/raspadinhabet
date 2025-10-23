@@ -18,7 +18,7 @@ export interface ScratchCard {
   isCompleted: boolean;
   hasWon: boolean;
   prizeAmount?: number;
-  prizeType?: 'money' | 'iphone';
+  prizeType?: 'money' | 'iphone' | 'applewatch';
 }
 
 export interface ScratchBlock {
