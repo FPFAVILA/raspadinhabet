@@ -184,9 +184,14 @@ export const useGameState = () => {
 
   // Iniciar nova carta
   const startNewCard = useCallback((): ScratchCard | null => {
-    // Verificar se tem saldo suficiente
-    if (gameState.balance < CARD_COST) {
-      console.log('❌ Saldo insuficiente:', gameState.balance);
+    console.log('🎮 startNewCard - Estado atual:', gameState);
+    console.log('🎮 startNewCard - Saldo:', gameState.balance, 'Custo:', CARD_COST);
+
+    // Verificar se tem saldo suficiente - comparação com arredondamento
+    const hasEnoughBalance = Math.round(gameState.balance * 100) >= Math.round(CARD_COST * 100);
+
+    if (!hasEnoughBalance) {
+      console.log('❌ Saldo insuficiente:', gameState.balance, '<', CARD_COST);
       return null;
     }
 
@@ -201,12 +206,16 @@ export const useGameState = () => {
       : generateLosingCard();
 
     // Atualizar estado: descontar o custo e incrementar rodadas
+    // Usar arredondamento para evitar problemas de float
+    const newBalance = Math.round((gameState.balance - CARD_COST) * 100) / 100;
+
     const newState: GameState = {
       ...gameState,
-      balance: gameState.balance - CARD_COST,
+      balance: newBalance,
       scratchCardsUsed: newRound
     };
 
+    console.log('💾 Novo estado após jogar:', newState);
     saveGameState(newState);
     return card;
   }, [gameState, saveGameState]);
@@ -227,19 +236,24 @@ export const useGameState = () => {
       newState.hasWonIphone = true;
     } else if (card.prizeAmount && card.prizeAmount > 0) {
       console.log('💰 Ganhou R$', card.prizeAmount);
-      newState.balance += card.prizeAmount;
+      // Usar arredondamento para evitar problemas de float
+      newState.balance = Math.round((gameState.balance + card.prizeAmount) * 100) / 100;
     }
 
+    console.log('💾 Estado após ganhar prêmio:', newState);
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
   // Adicionar saldo
   const addBalance = useCallback((amount: number) => {
     console.log('💵 Adicionando saldo:', amount);
+    // Usar arredondamento para evitar problemas de float
+    const newBalance = Math.round((gameState.balance + amount) * 100) / 100;
     const newState: GameState = {
       ...gameState,
-      balance: gameState.balance + amount
+      balance: newBalance
     };
+    console.log('💾 Estado após adicionar saldo:', newState);
     saveGameState(newState);
   }, [gameState, saveGameState]);
 

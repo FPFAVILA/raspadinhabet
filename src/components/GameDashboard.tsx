@@ -65,9 +65,13 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
   }, [gameState.hasWonIphone]);
 
 
-  // Verificar se precisa de saldo
-  const needsBalance = gameState.balance < CARD_COST;
-  
+  // Verificar se precisa de saldo - usando comparação com arredondamento para evitar problemas de float
+  const needsBalance = Math.round(gameState.balance * 100) < Math.round(CARD_COST * 100);
+
+  console.log('🎮 Dashboard - Saldo atual:', gameState.balance);
+  console.log('🎮 Dashboard - Custo da carta:', CARD_COST);
+  console.log('🎮 Dashboard - Precisa de saldo?', needsBalance);
+
   // Calcular valor sugerido baseado na rodada
   const getSuggestedAmount = () => {
     // Sempre sugerir apenas o que falta para jogar + pequena margem
@@ -77,19 +81,25 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
     }
     return 20; // Valor padrão quando não precisa de saldo
   };
-  
+
   const missingAmount = needsBalance ? CARD_COST - gameState.balance : 0;
 
   const handlePlayGame = () => {
+    console.log('🎮 Tentando jogar - Saldo:', gameState.balance, 'Custo:', CARD_COST);
+
     // Se não tem saldo suficiente
     if (needsBalance) {
+      console.log('❌ Saldo insuficiente!');
       setShowAddBalanceModal(true);
       return;
     }
 
+    console.log('✅ Saldo suficiente! Iniciando jogo...');
     const card = startNewCard();
     if (card) {
       setCurrentCard(card);
+    } else {
+      console.log('❌ Não foi possível criar a carta!');
     }
   };
 
