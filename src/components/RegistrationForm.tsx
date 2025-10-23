@@ -182,20 +182,20 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
           <div className="relative bg-gradient-to-r from-accent to-accent-hover p-8 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4 min-w-0 flex-1">
+            <div className="relative flex flex-col gap-4">
+              <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg">
                   <Crown className="w-8 h-8 text-white drop-shadow-lg" />
                 </div>
-                <div className="text-left min-w-0">
-                  <h1 className="text-2xl font-bold text-white truncate drop-shadow-lg">RaspadinhaPRO</h1>
+                <div className="text-left flex-1">
+                  <h1 className="text-2xl font-bold text-white drop-shadow-lg">RaspadinhaPRO</h1>
                   <p className="text-white/90 text-base font-medium">Prêmios Reais</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-xl border-2 border-white/30 flex-shrink-0 shadow-lg">
+              <div className="flex items-center justify-center gap-2.5 bg-white/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-white/30 shadow-lg">
                 <Gift className="w-6 h-6 text-white drop-shadow-lg" />
-                <div className="text-xl font-bold text-white whitespace-nowrap drop-shadow-lg">R$ 14,70</div>
+                <div className="text-xl font-bold text-white whitespace-nowrap drop-shadow-lg">Bônus de Boas-Vindas: R$ 14,70</div>
               </div>
             </div>
           </div>
