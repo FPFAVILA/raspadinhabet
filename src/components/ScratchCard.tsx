@@ -279,7 +279,7 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({ card, onComplete }) =>
               Raspadinha Premium
             </h3>
             <p className="text-gray-300 text-sm">
-              Raspe para revelar sua sorte
+              Encontre 3 símbolos iguais em sequência
             </p>
           </div>
         </div>
