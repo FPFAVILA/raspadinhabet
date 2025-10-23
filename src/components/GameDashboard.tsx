@@ -53,53 +53,50 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [wonAmount, setWonAmount] = useState(0);
 
-  // Verificar se ganhou iPhone
   useEffect(() => {
     const hasRedeemedIphone = localStorage.getItem('iphone_redeemed') === 'true';
     const hasShownWinning = localStorage.getItem('iphone_winning_shown') === 'true';
-    
+
     if (gameState.hasWonIphone && !hasRedeemedIphone && !hasShownWinning) {
       localStorage.setItem('iphone_winning_shown', 'true');
       setShowWinningScreen(true);
     }
   }, [gameState.hasWonIphone]);
 
+  const canPlay = gameState.balance >= CARD_COST;
+  const missingAmount = canPlay ? 0 : CARD_COST - gameState.balance;
 
-  // Verificar se precisa de saldo - usando comparação com arredondamento para evitar problemas de float
-  const needsBalance = Math.round(gameState.balance * 100) < Math.round(CARD_COST * 100);
+  console.log('=== DASHBOARD ===');
+  console.log('Saldo:', gameState.balance);
+  console.log('Pode jogar?', canPlay);
+  console.log('Falta:', missingAmount);
 
-  console.log('🎮 Dashboard - Saldo atual:', gameState.balance);
-  console.log('🎮 Dashboard - Custo da carta:', CARD_COST);
-  console.log('🎮 Dashboard - Precisa de saldo?', needsBalance);
-
-  // Calcular valor sugerido baseado na rodada
   const getSuggestedAmount = () => {
-    // Sempre sugerir apenas o que falta para jogar + pequena margem
-    if (needsBalance) {
-      const missing = CARD_COST - gameState.balance;
-      return Math.max(missing, 1); // Mínimo R$ 1,00
+    if (!canPlay) {
+      return Math.max(missingAmount, 1);
     }
-    return 20; // Valor padrão quando não precisa de saldo
+    return 20;
   };
 
-  const missingAmount = needsBalance ? CARD_COST - gameState.balance : 0;
-
   const handlePlayGame = () => {
-    console.log('🎮 Tentando jogar - Saldo:', gameState.balance, 'Custo:', CARD_COST);
+    console.log('=== CLICOU JOGAR ===');
+    console.log('Saldo:', gameState.balance);
+    console.log('Custo:', CARD_COST);
+    console.log('Pode jogar?', canPlay);
 
-    // Se não tem saldo suficiente
-    if (needsBalance) {
-      console.log('❌ Saldo insuficiente!');
+    if (!canPlay) {
+      console.log('❌ NÃO PODE JOGAR - SALDO INSUFICIENTE');
       setShowAddBalanceModal(true);
       return;
     }
 
-    console.log('✅ Saldo suficiente! Iniciando jogo...');
+    console.log('✅ PODE JOGAR!');
     const card = startNewCard();
     if (card) {
+      console.log('✅ Carta criada');
       setCurrentCard(card);
     } else {
-      console.log('❌ Não foi possível criar a carta!');
+      console.log('❌ ERRO ao criar carta');
     }
   };
 
@@ -272,13 +269,13 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
         <button
           onClick={handlePlayGame}
           className={`w-full font-bold py-5 rounded-2xl transition-all duration-300 shadow-modern text-lg relative overflow-hidden ${
-            gameState.balance >= CARD_COST
+            canPlay
               ? 'bg-accent text-white hover:bg-accent-hover hover-lift active:scale-95'
               : 'bg-orange-600 text-white hover:bg-orange-700 hover-lift active:scale-95'
           }`}
           style={{ touchAction: 'manipulation' }}
         >
-          {gameState.balance >= CARD_COST ? (
+          {canPlay ? (
             <div className="flex items-center justify-center gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
                 <Play className="w-5 h-5" />
@@ -307,7 +304,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({ user }) => {
         onClose={() => setShowAddBalanceModal(false)}
         onAddBalance={handleAddBalance}
         suggestedAmount={getSuggestedAmount()}
-        message={needsBalance ? (
+        message={!canPlay ? (
           `Você precisa de mais R$ ${missingAmount.toFixed(2).replace('.', ',')} para jogar a próxima rodada`
         ) : undefined}
       />

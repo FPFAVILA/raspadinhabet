@@ -4,43 +4,16 @@ import { GameState, ScratchCard, ScratchBlock } from '../types';
 const GAME_STATE_KEY = 'raspadinha_game_state';
 const CARD_COST = 4.90;
 
-// Lógica de vitória - Rodadas premiadas: 3ª (R$30), 7ª (R$20), 12ª (iPhone)
 const getWinLogic = (roundNumber: number) => {
-  console.log('🎮 Verificando lógica para rodada:', roundNumber);
-
-  // Rodada 3 - ganha R$ 30,00
-  if (roundNumber === 3) {
-    console.log('💰 Rodada 3: Vai ganhar R$ 30,00');
-    return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
-  }
-
-  // Rodada 7 - ganha R$ 20,00
-  if (roundNumber === 7) {
-    console.log('💰 Rodada 7: Vai ganhar R$ 20,00');
-    return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
-  }
-
-  // Rodada 12 - ganha iPhone
-  if (roundNumber === 12) {
-    console.log('📱 Rodada 12: Vai ganhar iPhone');
-    return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
-  }
-
-  // Todas as outras rodadas não ganham
-  console.log('❌ Rodada', roundNumber, ': Não ganha nada');
+  if (roundNumber === 3) return { shouldWin: true, prizeAmount: 30.00, prizeType: 'money' };
+  if (roundNumber === 7) return { shouldWin: true, prizeAmount: 20.00, prizeType: 'money' };
+  if (roundNumber === 12) return { shouldWin: true, prizeAmount: 0, prizeType: 'iphone' };
   return { shouldWin: false, prizeAmount: 0, prizeType: 'money' };
 };
 
 const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone'): ScratchCard => {
   const grid: ScratchBlock[] = [];
-
-  let winningSymbol: string;
-
-  if (prizeType === 'iphone') {
-    winningSymbol = '/iphone_13_PNG31.png';
-  } else {
-    winningSymbol = '💰';
-  }
+  const winningSymbol = prizeType === 'iphone' ? '/iphone_13_PNG31.png' : '💰';
 
   const moneySymbols = ['💵', '💰', '💸', '🪙', '🤑'];
   const appleImages = [
@@ -50,10 +23,8 @@ const generateWinningCard = (prizeAmount: number, prizeType: 'money' | 'iphone')
     '/Airpods-Transparent-Images-PNG.png',
     '/Apple-Watch-PNG-High-Quality-Image.png'
   ];
-
   const allSymbols = [...moneySymbols, ...appleImages];
 
-  // Criar padrão vencedor (linha horizontal no meio - posições 3, 4, 5)
   for (let i = 0; i < 9; i++) {
     const isWinningPosition = i >= 3 && i <= 5;
     grid.push({
@@ -85,26 +56,32 @@ const generateLosingCard = (): ScratchCard => {
     '/Airpods-Transparent-Images-PNG.png',
     '/Apple-Watch-PNG-High-Quality-Image.png'
   ];
-
   const allSymbols = [...moneySymbols, ...appleImages];
   const grid: ScratchBlock[] = [];
+
+  const wouldCreateWinningPattern = (currentGrid: ScratchBlock[], pos: number, sym: string): boolean => {
+    const temp = [...currentGrid];
+    temp[pos] = { id: pos, isRevealed: false, symbol: sym, position: { x: pos % 3, y: Math.floor(pos / 3) } };
+    const patterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    return patterns.some(pattern => {
+      const symbols = pattern.map(i => temp[i]?.symbol).filter(Boolean);
+      return symbols.length === 3 && symbols.every(s => s === symbols[0]);
+    });
+  };
 
   for (let i = 0; i < 9; i++) {
     let symbol;
     let attempts = 0;
     do {
-      const rand = Math.random();
-      if (rand < 0.7) {
-        symbol = moneySymbols[Math.floor(Math.random() * moneySymbols.length)];
-      } else {
-        symbol = appleImages[Math.floor(Math.random() * appleImages.length)];
-      }
+      symbol = Math.random() < 0.7
+        ? moneySymbols[Math.floor(Math.random() * moneySymbols.length)]
+        : appleImages[Math.floor(Math.random() * appleImages.length)];
       attempts++;
     } while (wouldCreateWinningPattern(grid, i, symbol) && attempts < 50);
-
-    if (attempts >= 50) {
-      symbol = allSymbols[Math.floor(Math.random() * allSymbols.length)];
-    }
 
     grid.push({
       id: i,
@@ -123,27 +100,6 @@ const generateLosingCard = (): ScratchCard => {
   };
 };
 
-const wouldCreateWinningPattern = (grid: ScratchBlock[], position: number, symbol: string): boolean => {
-  const tempGrid = [...grid];
-  tempGrid[position] = {
-    id: position,
-    isRevealed: false,
-    symbol,
-    position: { x: position % 3, y: Math.floor(position / 3) }
-  };
-
-  const patterns = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontais
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Verticais
-    [0, 4, 8], [2, 4, 6] // Diagonais
-  ];
-
-  return patterns.some(pattern => {
-    const symbols = pattern.map(i => tempGrid[i]?.symbol).filter(Boolean);
-    return symbols.length === 3 && symbols.every(s => s === symbols[0]);
-  });
-};
-
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>({
     balance: 0,
@@ -153,79 +109,63 @@ export const useGameState = () => {
 
   const [isNewUser, setIsNewUser] = useState(true);
 
-  // Carregar estado do jogo do localStorage
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(GAME_STATE_KEY);
-
-      if (saved) {
-        const parsedState = JSON.parse(saved);
-        console.log('📊 Estado carregado:', parsedState);
-        setGameState(parsedState);
-        setIsNewUser(false);
-      } else {
-        console.log('🆕 Novo usuário - sem estado salvo');
-      }
-    } catch (error) {
-      console.error('❌ Erro ao carregar estado do jogo:', error);
+    const saved = localStorage.getItem(GAME_STATE_KEY);
+    if (saved) {
+      const parsedState = JSON.parse(saved);
+      console.log('📊 Estado carregado:', parsedState);
+      setGameState(parsedState);
+      setIsNewUser(false);
+    } else {
+      console.log('🆕 Novo usuário');
     }
   }, []);
 
-  // Salvar estado no localStorage sempre que mudar
   const saveGameState = useCallback((newState: GameState) => {
-    try {
-      console.log('💾 Salvando estado:', newState);
-      localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
-      setGameState(newState);
-    } catch (error) {
-      console.error('❌ Erro ao salvar estado do jogo:', error);
-    }
+    console.log('💾 Salvando:', newState);
+    localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
+    setGameState(newState);
   }, []);
 
-  // Iniciar nova carta
   const startNewCard = useCallback((): ScratchCard | null => {
-    console.log('🎮 startNewCard - Estado atual:', gameState);
-    console.log('🎮 startNewCard - Saldo:', gameState.balance, 'Custo:', CARD_COST);
+    console.log('=== INICIANDO NOVA CARTA ===');
+    console.log('Saldo atual:', gameState.balance);
+    console.log('Custo:', CARD_COST);
+    console.log('Rodadas jogadas:', gameState.scratchCardsUsed);
 
-    // Verificar se tem saldo suficiente - comparação com arredondamento
-    const hasEnoughBalance = Math.round(gameState.balance * 100) >= Math.round(CARD_COST * 100);
-
-    if (!hasEnoughBalance) {
-      console.log('❌ Saldo insuficiente:', gameState.balance, '<', CARD_COST);
+    if (gameState.balance < CARD_COST) {
+      console.log('❌ SALDO INSUFICIENTE!');
       return null;
     }
 
     const newRound = gameState.scratchCardsUsed + 1;
-    console.log('🎮 Iniciando rodada:', newRound);
+    console.log('🎮 RODADA:', newRound);
 
     const winLogic = getWinLogic(newRound);
+    console.log('Lógica:', winLogic);
 
-    // Gerar carta baseada na lógica de vitória
     const card = winLogic.shouldWin
       ? generateWinningCard(winLogic.prizeAmount, winLogic.prizeType as 'money' | 'iphone')
       : generateLosingCard();
 
-    // Atualizar estado: descontar o custo e incrementar rodadas
-    // Usar arredondamento para evitar problemas de float
-    const newBalance = Math.round((gameState.balance - CARD_COST) * 100) / 100;
-
+    const newBalance = parseFloat((gameState.balance - CARD_COST).toFixed(2));
     const newState: GameState = {
       ...gameState,
       balance: newBalance,
       scratchCardsUsed: newRound
     };
 
-    console.log('💾 Novo estado após jogar:', newState);
+    console.log('Novo estado:', newState);
     saveGameState(newState);
     return card;
   }, [gameState, saveGameState]);
 
-  // Completar carta e adicionar prêmio
   const completeCard = useCallback((card: ScratchCard) => {
-    console.log('✅ Completando carta:', card);
+    console.log('=== COMPLETANDO CARTA ===');
+    console.log('Ganhou?', card.hasWon);
 
     if (!card.hasWon) {
-      console.log('😢 Carta perdedora - sem prêmio');
+      console.log('😢 Perdeu');
       return;
     }
 
@@ -236,24 +176,21 @@ export const useGameState = () => {
       newState.hasWonIphone = true;
     } else if (card.prizeAmount && card.prizeAmount > 0) {
       console.log('💰 Ganhou R$', card.prizeAmount);
-      // Usar arredondamento para evitar problemas de float
-      newState.balance = Math.round((gameState.balance + card.prizeAmount) * 100) / 100;
+      newState.balance = parseFloat((gameState.balance + card.prizeAmount).toFixed(2));
     }
 
-    console.log('💾 Estado após ganhar prêmio:', newState);
+    console.log('Novo estado:', newState);
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
-  // Adicionar saldo
   const addBalance = useCallback((amount: number) => {
-    console.log('💵 Adicionando saldo:', amount);
-    // Usar arredondamento para evitar problemas de float
-    const newBalance = Math.round((gameState.balance + amount) * 100) / 100;
+    console.log('💵 Adicionando R$', amount);
+    const newBalance = parseFloat((gameState.balance + amount).toFixed(2));
     const newState: GameState = {
       ...gameState,
       balance: newBalance
     };
-    console.log('💾 Estado após adicionar saldo:', newState);
+    console.log('Novo saldo:', newBalance);
     saveGameState(newState);
   }, [gameState, saveGameState]);
 
