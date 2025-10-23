@@ -179,12 +179,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
         )}
 
         <div className={`bg-gray-900/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-800 ${showSuccess ? 'opacity-20' : ''} transition-opacity duration-500`}>
-          <div className="relative bg-gradient-to-r from-accent to-accent-hover p-8 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-accent via-accent to-accent-hover p-8 overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" style={{ animationDuration: '3s' }} />
 
             <div className="relative flex flex-col gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30 flex-shrink-0 shadow-lg transform hover:scale-105 transition-transform duration-300">
                   <Crown className="w-8 h-8 text-white drop-shadow-lg" />
                 </div>
                 <div className="text-left flex-1">
@@ -193,7 +194,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                 </div>
               </div>
 
-              <div className="flex items-center justify-center gap-2.5 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl border-2 border-white/30 shadow-lg">
+              <div className="flex items-center justify-center gap-2.5 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl border-2 border-white/30 shadow-lg hover:bg-white/25 transition-colors duration-300">
                 <Gift className="w-6 h-6 text-white drop-shadow-lg" />
                 <div className="text-2xl font-bold text-white whitespace-nowrap drop-shadow-lg">R$ 14,70</div>
               </div>
@@ -324,6 +325,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
                 className="w-full bg-gradient-to-r from-accent via-accent to-accent-hover text-white font-bold py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-accent/50 relative overflow-hidden group mt-8 text-lg"
                 style={{ touchAction: 'manipulation' }}
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 <div className="relative flex items-center justify-center gap-2">
                   {isSubmitting ? (
                     <>
@@ -345,22 +347,23 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegister }
             </form>
 
             <div className="mt-8 grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
-                <Gift className="w-7 h-7 text-accent mx-auto mb-2" />
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Gift className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
                 <div className="text-white text-sm font-medium">Prêmios Reais</div>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
-                <Award className="w-7 h-7 text-accent mx-auto mb-2" />
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Award className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
                 <div className="text-white text-sm font-medium">Plataforma Regularizada</div>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700">
-                <Shield className="w-7 h-7 text-accent mx-auto mb-2" />
+              <div className="text-center p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-accent/50 hover:bg-gray-800/70 transition-all duration-300 cursor-default">
+                <Shield className="w-7 h-7 text-accent mx-auto mb-2 transition-transform duration-300 hover:scale-110" />
                 <div className="text-white text-sm font-medium">Seguro</div>
               </div>
             </div>
 
-            <div className="mt-6 text-center text-gray-500 text-sm">
-              Dados protegidos com criptografia SSL
+            <div className="mt-6 flex items-center justify-center gap-2 text-gray-500 text-sm">
+              <Shield className="w-4 h-4" />
+              <span>Dados protegidos com criptografia SSL</span>
             </div>
           </div>
         </div>
