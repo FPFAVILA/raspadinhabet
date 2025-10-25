@@ -30,3 +30,19 @@ export const trackRegistration = (userData?: any) => {
 export const trackPrizeRedemption = (prizeData?: any) => {
   trackEvent('ResgateIphone', prizeData);
 };
+
+export const trackAddBalance = (amount: number) => {
+  trackEvent('AddBalance', { amount });
+};
+
+export const trackPixGenerated = (amount: number, transactionId: string) => {
+  trackEvent('PixGerado', { amount, transactionId });
+};
+
+export const trackScratchCard = (cardNumber: number) => {
+  trackEvent('RaspadinhaRevelada', { cardNumber });
+};
+
+export const trackPrizeWon = (prizeType: string, prizeValue?: number) => {
+  trackEvent('PremioGanho', { prizeType, prizeValue });
+};
