@@ -1,28 +1,22 @@
-// Utmify tracking utilities
+// Facebook Pixel tracking utilities
 declare global {
   interface Window {
-    pixelId?: string;
-    AdvancedPixelEvent?: (eventName: string, eventData?: any) => void;
+    fbq?: (action: string, event: string, data?: any) => void;
   }
 }
 
-export const trackEvent = (eventName: string, eventData?: any) => {
+export const trackPurchase = (value: number, currency: string = 'BRL') => {
   try {
-    if (typeof window !== 'undefined' && window.AdvancedPixelEvent) {
-      window.AdvancedPixelEvent(eventName, eventData);
-      console.log(`[Utmify] Event tracked: ${eventName}`, eventData);
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Purchase', {
+        value: value,
+        currency: currency
+      });
+      console.log(`[Facebook Pixel] Purchase tracked: ${value} ${currency}`);
     } else {
-      console.warn(`[Utmify] AdvancedPixelEvent not available for: ${eventName}`);
+      console.warn('[Facebook Pixel] fbq not available');
     }
   } catch (error) {
-    console.error(`[Utmify] Error tracking ${eventName}:`, error);
+    console.error('[Facebook Pixel] Error tracking Purchase:', error);
   }
-};
-
-export const trackPageView = () => {
-  trackEvent('PageView');
-};
-
-export const trackLead = (prizeData?: any) => {
-  trackEvent('Lead', prizeData);
 };

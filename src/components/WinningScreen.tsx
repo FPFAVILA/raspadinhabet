@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Trophy, ShieldCheck, Sparkles, Award, Zap, Star } from 'lucide-react';
 import { User } from '../types';
-import { trackLead } from '../utils/tracking';
 
 interface WinningScreenProps {
   user: User;
@@ -26,11 +25,6 @@ export const WinningScreen: React.FC<WinningScreenProps> = ({ user, onClose, onA
   }, []);
 
   const handleClaimPrize = () => {
-    trackLead({
-      prize: 'Apple Watch',
-      value: prizeValue,
-      user: user.name
-    });
     onAddToBalance(prizeValue);
     onClose();
   };
