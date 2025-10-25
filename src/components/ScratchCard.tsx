@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ScratchCard as ScratchCardType, ScratchBlock } from '../types';
 import { X, Sparkles, Trophy } from 'lucide-react';
-import { trackScratchCard, trackPrizeWon } from '../utils/tracking';
 
 interface ScratchCardProps {
   card: ScratchCardType;
@@ -40,12 +39,6 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({ card, onComplete }) =>
 
   // Sair do modo fullscreen
   const exitFullscreen = useCallback(() => {
-    trackScratchCard(card.id);
-
-    if (card.isWinner && card.prize) {
-      trackPrizeWon(card.prize.type, card.prize.value);
-    }
-
     onComplete(card);
   }, [card, onComplete]);
 

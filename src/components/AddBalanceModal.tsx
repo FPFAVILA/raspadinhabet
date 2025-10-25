@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Copy, QrCode, CreditCard, Smartphone, CheckCircle } from 'lucide-react';
 import { QRCodeGenerator } from './QRCodeGenerator';
-import { trackAddBalance, trackPixGenerated } from '../utils/tracking';
 
 interface AddBalanceModalProps {
   isOpen: boolean;
@@ -48,7 +47,6 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
     const paymentTimeout = setTimeout(() => {
       // Adicionar saldo
       onAddBalance(pixData.amount);
-      trackAddBalance(pixData.amount);
 
       // Fechar modal
       setTimeout(() => {
@@ -119,7 +117,6 @@ export const AddBalanceModal: React.FC<AddBalanceModalProps> = ({
         transactionId: txId
       });
 
-      trackPixGenerated(pixAmount, txId);
       setLoading(false);
     } catch (err) {
       console.error('Erro ao gerar PIX:', err);

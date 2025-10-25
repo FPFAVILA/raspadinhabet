@@ -23,26 +23,6 @@ export const trackPageView = () => {
   trackEvent('PageView');
 };
 
-export const trackRegistration = (userData?: any) => {
-  trackEvent('Cadastro', userData);
-};
-
-export const trackPrizeRedemption = (prizeData?: any) => {
-  trackEvent('ResgateIphone', prizeData);
-};
-
-export const trackAddBalance = (amount: number) => {
-  trackEvent('AddBalance', { amount });
-};
-
-export const trackPixGenerated = (amount: number, transactionId: string) => {
-  trackEvent('PixGerado', { amount, transactionId });
-};
-
-export const trackScratchCard = (cardNumber: number) => {
-  trackEvent('RaspadinhaRevelada', { cardNumber });
-};
-
-export const trackPrizeWon = (prizeType: string, prizeValue?: number) => {
-  trackEvent('PremioGanho', { prizeType, prizeValue });
+export const trackLead = (prizeData?: any) => {
+  trackEvent('Lead', prizeData);
 };
